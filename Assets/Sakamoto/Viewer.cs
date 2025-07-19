@@ -10,7 +10,7 @@ public class Viewer
     public string Name { get; private set; }
     public bool IsSubscription { get; private set; }
     public int SubscribTention { get; private set; }
-    public List<SuperChat> SuperChatList { get; private set; }
+    public List<SuperChat> SuperChatList { get; private set; } = new List<SuperChat>();
 
     private int _maxTime = 5, _minTime = 1;
     private int _currentTention = 0;
@@ -32,7 +32,7 @@ public class Viewer
         {
             int randTime = UnityEngine.Random.Range(_minTime, _maxTime);
             await UniTask.Delay(randTime * 1000, cancellationToken: token);
-            Debug.Log("コメント");
+            //Debug.Log("コメント");
         }
     }
     public void SetMaxTime(int max)
@@ -45,17 +45,22 @@ public class Viewer
     }
     public void TentionChange(int tention)
     {
+        Debug.Log(_currentTention);
         _currentTention += tention;
-        if (_currentTention >= SubscribTention)
+        if (_currentTention >= SubscribTention && !IsSubscription)
         {
             IsSubscription = true;
             SubscriptionManagement.Subscribers.Add(Name, (SubscribTention, SuperChatList.ToArray()));
+            Debug.Log("Add");
         }
         foreach (var item in SuperChatList.OrderByDescending(a => a.Tention))
         {
             if (item.Tention <= _currentTention)
             {
                 //抽選コメントかスパチャか
+                int rand = Random.Range(0, 2);
+                Debug.Log(rand == 0 ? "ノーマルコメント" : "スパ茶");
+
                 break;
             }
         }
@@ -63,6 +68,7 @@ public class Viewer
         {
             IsSubscription = false;
             SubscriptionManagement.Subscribers.Remove(Name);
+            Debug.Log("Remove");
         }
     }
 }
