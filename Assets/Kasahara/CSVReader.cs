@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class CSVReader
 {
-    Dictionary<string, (int SubscribeTension, (int Money, int Tension)[] SuperChat)> viewerData = new Dictionary<string, (int, (int money, int tension)[])>();
-    HashSet<string> standbyViewerName = new HashSet<string>();
-    Dictionary<string, Dictionary<string, (string Response, int FlatteryPoints)[]>> CommentAndResponseData = new Dictionary<string, Dictionary<string, (string Response, int FlatteryPoints)[]>>();
+    readonly Dictionary<string, (int SubscribeTension, (int Money, int Tension)[] SuperChat)> viewerData = new Dictionary<string, (int, (int money, int tension)[])>();
+    readonly HashSet<string> standbyViewerName = new HashSet<string>();
+    readonly Dictionary<string, Dictionary<string, (string Response, int FlatteryPoints)[]>> CommentAndResponseData = new Dictionary<string, Dictionary<string, (string Response, int FlatteryPoints)[]>>();
     public CSVReader()
     {
         LoadViewerData();
@@ -78,7 +78,11 @@ public class CSVReader
             Debug.LogError("CSVファイルが見つかりませんでした: " + commentCsvPath);
         }
     }
-    [ContextMenu("GetRandomViewer")]
+    /// <summary>
+    /// ランダムに視聴者を選択し、その視聴者の名前、チャンネル登録に必要なテンション、
+    /// スパチャ額とそれを投げるためのテンションの配列を返す。
+    /// </summary>
+    /// <returns></returns>
     public KeyValuePair<string, (int SubscribeTension, (int Money, int Tension)[] SuperChat)>? GetRandomViewer()
     {
         // ランダムに視聴者を選択
@@ -102,12 +106,21 @@ public class CSVReader
             return null;
         }
     }
+    /// <summary>
+    /// 視聴者が退出した際に呼ぶ。指定された視聴者名をスタンバイ中の視聴者リストに戻す。
+    /// </summary>
+    /// <param name="name"></param>
     public void ExitViewer(string name)
     {
         standbyViewerName.Add(name);
     }
     public KeyValuePair<string, (string Response,int flattypoints)[]> GetRandomCommentAndResponse(string type)
     {
-        return CommentAndResponseData[type].ElementAt(Random.Range(0, CommentAndResponseData[type].Count));
+        if (!CommentAndResponseData.TryGetValue(type,out var dic))
+        {
+            Debug.LogWarning($"指定されたコメントタイプが存在しません: {type}");
+            return default;
+        }
+        return dic.ElementAt(Random.Range(0, CommentAndResponseData[type].Count));
     }
 }
