@@ -16,10 +16,10 @@ public class CSVReader
     }
     void LoadViewerData()
     {
-        // StreamingAssetsƒtƒHƒ‹ƒ_‚ÌCSVƒtƒ@ƒCƒ‹ƒpƒX‚ğæ“¾
+        // StreamingAssetsãƒ•ã‚©ãƒ«ãƒ€ã®CSVãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‚’å–å¾—
         string viewerCsvPath = Path.Combine(Application.streamingAssetsPath, "Viewer.csv");
 
-        // ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
+        // ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
         if (File.Exists(viewerCsvPath))
         {
             string[] lines = File.ReadAllLines(viewerCsvPath);
@@ -27,7 +27,7 @@ public class CSVReader
             foreach (string line in lines.Skip(1))
             {
                 string[] values = line.Split(',');
-                standbyViewerName.Add(values[0]); // ‹’®Ò–¼‚ğƒnƒbƒVƒ…ƒZƒbƒg‚É’Ç‰Á
+                standbyViewerName.Add(values[0]); // è¦–è´è€…åã‚’ãƒãƒƒã‚·ãƒ¥ã‚»ãƒƒãƒˆã«è¿½åŠ 
                 viewerData.Add(values[0], (int.Parse(values[1]), new (int Money, int Tension)[(values.Length - 2) / 2]));
                 for (int i = 2; i < values.Length; i += 2)
                 {
@@ -42,7 +42,7 @@ public class CSVReader
         }
         else
         {
-            Debug.LogError("CSVƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: " + viewerCsvPath);
+            Debug.LogError("CSVãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ: " + viewerCsvPath);
         }
     }
     void LoadCommentAndResponseData()
@@ -55,7 +55,7 @@ public class CSVReader
             {
                 string[] values = line.Split(',',System.StringSplitOptions.RemoveEmptyEntries);
                 CommentAndResponseData.Add(values[0], new Dictionary<string, (string response, int flatteryPoints)[]>());
-                //ƒRƒƒ“ƒg‚Ìƒ^ƒCƒv‚ğƒL[‚Æ‚µ‚ÄAƒRƒƒ“ƒg‚ğƒL[‚Æ‚·‚é«‘‚ÉƒŒƒXƒ|ƒ“ƒX‚Æƒtƒ‰ƒbƒ^ƒŠ[ƒ|ƒCƒ“ƒg‚ÌƒyƒA‚Ì”z—ñ‚ğ’Ç‰Á
+                //ã‚³ãƒ¡ãƒ³ãƒˆã®ã‚¿ã‚¤ãƒ—ã‚’ã‚­ãƒ¼ã¨ã—ã¦ã€ã‚³ãƒ¡ãƒ³ãƒˆã‚’ã‚­ãƒ¼ã¨ã™ã‚‹è¾æ›¸ã«ãƒ¬ã‚¹ãƒãƒ³ã‚¹ã¨ãƒ•ãƒ©ãƒƒã‚¿ãƒªãƒ¼ãƒã‚¤ãƒ³ãƒˆã®ãƒšã‚¢ã®é…åˆ—ã‚’è¿½åŠ 
                 CommentAndResponseData[values[0]].Add(values[1], new (string Response, int FlatteryPoints)[(values.Length - 2) / 2]);
                 //CommentAndResponse.Add(values[0], (values[1], new (string response, int flatteryPoints)[(values.Length - 2) / 2]));
                 for (int i = 2; i < values.Length; i += 2)
@@ -75,39 +75,39 @@ public class CSVReader
         }
         else
         {
-            Debug.LogError("CSVƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: " + commentCsvPath);
+            Debug.LogError("CSVãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ: " + commentCsvPath);
         }
     }
     /// <summary>
-    /// ƒ‰ƒ“ƒ_ƒ€‚É‹’®Ò‚ğ‘I‘ğ‚µA‚»‚Ì‹’®Ò‚Ì–¼‘OAƒ`ƒƒƒ“ƒlƒ‹“o˜^‚É•K—v‚Èƒeƒ“ƒVƒ‡ƒ“A
-    /// ƒXƒpƒ`ƒƒŠz‚Æ‚»‚ê‚ğ“Š‚°‚é‚½‚ß‚Ìƒeƒ“ƒVƒ‡ƒ“‚Ì”z—ñ‚ğ•Ô‚·B
+    /// ãƒ©ãƒ³ãƒ€ãƒ ã«è¦–è´è€…ã‚’é¸æŠã—ã€ãã®è¦–è´è€…ã®åå‰ã€ãƒãƒ£ãƒ³ãƒãƒ«ç™»éŒ²ã«å¿…è¦ãªãƒ†ãƒ³ã‚·ãƒ§ãƒ³ã€
+    /// ã‚¹ãƒ‘ãƒãƒ£é¡ã¨ãã‚Œã‚’æŠ•ã’ã‚‹ãŸã‚ã®ãƒ†ãƒ³ã‚·ãƒ§ãƒ³ã®é…åˆ—ã‚’è¿”ã™ã€‚
     /// </summary>
     /// <returns></returns>
     public KeyValuePair<string, (int SubscribeTension, (int Money, int Tension)[] SuperChat)>? GetRandomViewer()
     {
-        // ƒ‰ƒ“ƒ_ƒ€‚É‹’®Ò‚ğ‘I‘ğ
+        // ãƒ©ãƒ³ãƒ€ãƒ ã«è¦–è´è€…ã‚’é¸æŠ
         if (viewerData.Count > 0)
         {
             if (standbyViewerName.Count == 0)
             {
-                Debug.LogWarning("ƒXƒ^ƒ“ƒoƒC’†‚Ì‹’®Ò‚ª‚¢‚Ü‚¹‚ñB");
+                Debug.LogWarning("ã‚¹ã‚¿ãƒ³ãƒã‚¤ä¸­ã®è¦–è´è€…ãŒã„ã¾ã›ã‚“ã€‚");
                 return null;
             }
             string viewerName = standbyViewerName.ElementAt(Random.Range(0, standbyViewerName.Count));
             standbyViewerName.Remove(viewerName);
             var randomViewer = viewerData[viewerName];
             KeyValuePair<string, (int SubscribeTension, (int Money, int Tension)[] SuperChat)> randomViewerPair = new(viewerName, randomViewer);
-            Debug.Log($"ƒ‰ƒ“ƒ_ƒ€‚É‘I‚Î‚ê‚½‹’®Ò: {randomViewerPair.Key}, SubscribeTension: {randomViewerPair.Value.SubscribeTension}, SuperChat: {string.Join(", ", randomViewerPair.Value.Item2.Select(sc => $"({sc.Money}, {sc.Tension})"))}");
+            Debug.Log($"ãƒ©ãƒ³ãƒ€ãƒ ã«é¸ã°ã‚ŒãŸè¦–è´è€…: {randomViewerPair.Key}, SubscribeTension: {randomViewerPair.Value.SubscribeTension}, SuperChat: {string.Join(", ", randomViewerPair.Value.Item2.Select(sc => $"({sc.Money}, {sc.Tension})"))}");
             return randomViewerPair;
         }
         else
         {
-            Debug.LogWarning("‹’®Òƒf[ƒ^‚ª‹ó‚Å‚·B");
+            Debug.LogWarning("è¦–è´è€…ãƒ‡ãƒ¼ã‚¿ãŒç©ºã§ã™ã€‚");
             return null;
         }
     }
     /// <summary>
-    /// ‹’®Ò‚ª‘Şo‚µ‚½Û‚ÉŒÄ‚ÔBw’è‚³‚ê‚½‹’®Ò–¼‚ğƒXƒ^ƒ“ƒoƒC’†‚Ì‹’®ÒƒŠƒXƒg‚É–ß‚·B
+    /// è¦–è´è€…ãŒé€€å‡ºã—ãŸéš›ã«å‘¼ã¶ã€‚æŒ‡å®šã•ã‚ŒãŸè¦–è´è€…åã‚’ã‚¹ã‚¿ãƒ³ãƒã‚¤ä¸­ã®è¦–è´è€…ãƒªã‚¹ãƒˆã«æˆ»ã™ã€‚
     /// </summary>
     /// <param name="name"></param>
     public void ExitViewer(string name)
@@ -115,7 +115,7 @@ public class CSVReader
         standbyViewerName.Add(name);
     }
     /// <summary>
-    /// w’è‚³‚ê‚½ƒRƒƒ“ƒgƒ^ƒCƒv‚Ì’†‚©‚çƒ‰ƒ“ƒ_ƒ€‚ÉƒRƒƒ“ƒg‚ÆƒŒƒXƒ|ƒ“ƒX‚ğæ“¾‚·‚éB
+    /// æŒ‡å®šã•ã‚ŒãŸã‚³ãƒ¡ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã®ä¸­ã‹ã‚‰ãƒ©ãƒ³ãƒ€ãƒ ã«ã‚³ãƒ¡ãƒ³ãƒˆã¨ãƒ¬ã‚¹ãƒãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹ã€‚
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
@@ -123,7 +123,7 @@ public class CSVReader
     {
         if (!CommentAndResponseData.TryGetValue(type,out var dic))
         {
-            Debug.LogWarning($"w’è‚³‚ê‚½ƒRƒƒ“ƒgƒ^ƒCƒv‚ª‘¶İ‚µ‚Ü‚¹‚ñ: {type}");
+            Debug.LogWarning($"æŒ‡å®šã•ã‚ŒãŸã‚³ãƒ¡ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ãŒå­˜åœ¨ã—ã¾ã›ã‚“: {type}");
             return default;
         }
         return dic.ElementAt(Random.Range(0, CommentAndResponseData[type].Count));
