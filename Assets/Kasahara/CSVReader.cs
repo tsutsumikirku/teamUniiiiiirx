@@ -114,6 +114,11 @@ public class CSVReader
     {
         standbyViewerName.Add(name);
     }
+    /// <summary>
+    /// 指定されたコメントタイプの中からランダムにコメントとレスポンスを取得する。
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public KeyValuePair<string, (string Response,int flattypoints)[]> GetRandomCommentAndResponse(string type)
     {
         if (!CommentAndResponseData.TryGetValue(type,out var dic))
