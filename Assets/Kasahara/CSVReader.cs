@@ -4,12 +4,12 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-public class CSVReader : MonoBehaviour
+public class CSVReader
 {
     Dictionary<string, (int SubscribeTension, (int Money, int Tension)[] SuperChat)> viewerData = new Dictionary<string, (int, (int money, int tension)[])>();
     HashSet<string> standbyViewerName = new HashSet<string>();
     Dictionary<string, Dictionary<string, (string Response, int FlatteryPoints)[]>> CommentAndResponseData = new Dictionary<string, Dictionary<string, (string Response, int FlatteryPoints)[]>>();
-    void Start()
+    public CSVReader()
     {
         LoadViewerData();
         LoadCommentAndResponseData();
@@ -79,7 +79,7 @@ public class CSVReader : MonoBehaviour
         }
     }
     [ContextMenu("GetRandomViewer")]
-    KeyValuePair<string, (int SubscribeTension, (int Money, int Tension)[] SuperChat)>? GetRandomViewer()
+    public KeyValuePair<string, (int SubscribeTension, (int Money, int Tension)[] SuperChat)>? GetRandomViewer()
     {
         // ƒ‰ƒ“ƒ_ƒ€‚ÉŽ‹’®ŽÒ‚ð‘I‘ð
         if (viewerData.Count > 0)
@@ -102,11 +102,11 @@ public class CSVReader : MonoBehaviour
             return null;
         }
     }
-    void ExitViewer(string name)
+    public void ExitViewer(string name)
     {
         standbyViewerName.Add(name);
     }
-    KeyValuePair<string, (string Response,int flattypoints)[]> GetRandomCommentAndResponse(string type)
+    public KeyValuePair<string, (string Response,int flattypoints)[]> GetRandomCommentAndResponse(string type)
     {
         return CommentAndResponseData[type].ElementAt(Random.Range(0, CommentAndResponseData[type].Count));
     }
