@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -9,22 +9,23 @@ public class Viewer
 {
     public string Name { get; private set; }
     public bool IsSubscription { get; private set; }
-    public int SubscribTensions { get; private set; }
+    public int SubscribeTensions { get; private set; }
     public List<SuperChat> SuperChatList { get; private set; } = new List<SuperChat>();
 
     private float _maxTime = 5, _minTime = 1;
     private float _currentTension = 0;
-
-    public Viewer(string name, (int SubscribTention, (int money, int tention)[] SuperChat) data)
+    private CommentGenerator _generator;
+    public Viewer(string name, (int SubscribTention, (int money, int tention)[] SuperChat) data, CommentGenerator generator)
     {
         Name = name;
-        SubscribTensions = data.SubscribTention;
+        SubscribeTensions = data.SubscribTention;
         foreach (var item in data.SuperChat)
         {
             SuperChatList.Add(new SuperChat(item.money, item.tention));
         }
         CancellationTokenSource cts = new CancellationTokenSource();
         LoopAsync(cts.Token).Forget();
+        _generator = generator;
     }
     private async UniTask LoopAsync(CancellationToken token)
     {
@@ -32,7 +33,7 @@ public class Viewer
         {
             float randTime = UnityEngine.Random.Range(_minTime, _maxTime);
             await UniTask.Delay((int)(randTime * 1000), cancellationToken: token);
-            //Debug.Log("ƒRƒƒ“ƒg");
+            _generator.SetComment(Name);
         }
     }
     public void SetMaxTime(float max)
@@ -47,19 +48,19 @@ public class Viewer
     {
         Debug.Log(_currentTension);
         _currentTension += tension;
-        if (_currentTension >= SubscribTensions && !IsSubscription)
+        if (_currentTension >= SubscribeTensions && !IsSubscription)
         {
             IsSubscription = true;
-            SubscriptionManagement.Subscribers.Add(Name, (SubscribTensions, SuperChatList.ToArray()));
+            SubscriptionManagement.Subscribers.Add(Name, (SubscribeTensions, SuperChatList.ToArray()));
             Debug.Log("Add");
         }
         foreach (var item in SuperChatList.OrderByDescending(a => a.Tension))
         {
             if (item.Tension <= _currentTension)
             {
-                //’Š‘IƒRƒƒ“ƒg‚©ƒXƒpƒ`ƒƒ‚©
+                //æŠ½é¸ã‚³ãƒ¡ãƒ³ãƒˆã‹ã‚¹ãƒ‘ãƒãƒ£ã‹
                 int rand = Random.Range(0, 2);
-                Debug.Log(rand == 0 ? "ƒm[ƒ}ƒ‹ƒRƒƒ“ƒg" : "ƒXƒp’ƒ");
+                Debug.Log(rand == 0 ? "ãƒŽãƒ¼ãƒžãƒ«ã‚³ãƒ¡ãƒ³ãƒˆ" : "ã‚¹ãƒ‘èŒ¶");
 
                 break;
             }

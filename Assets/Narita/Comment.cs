@@ -7,7 +7,8 @@ public class Comment : MonoBehaviour
 {
     public string ReplyComment { get; private set; }
     public string Name { get; private set; }
-    [SerializeField] Text _text;
+    [SerializeField] Text _nameText;
+    [SerializeField] Text _replyText;
 
     public void OnReply()
     {
@@ -18,6 +19,7 @@ public class Comment : MonoBehaviour
     {
         Name = name;
         ReplyComment = reply;
-        _text.text = $"{Name}\n{ReplyComment}";
+        _nameText.text = $"{Name}";
+        _replyText.text = $"{ReplyComment}";
     }
 }
