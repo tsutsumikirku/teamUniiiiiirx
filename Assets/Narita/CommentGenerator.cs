@@ -23,7 +23,7 @@ public class CommentGenerator : MonoBehaviour
     }
     private void OnDisable()
     {
-        TimeManager.Instance.CommentAction -= (topic) => SetComment(topic);
+        _timeManger.CommentAction -= (topic) => SetComment(topic);
         DataManager.Instance.TopicData.OnStateChange -= () => _currentCount = _topicCount;
     }
 
