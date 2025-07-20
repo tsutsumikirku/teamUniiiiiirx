@@ -18,7 +18,6 @@ public class TimeManager : MonoBehaviour
     private int _topicIndex = 0;
     public float StreamTime { get; private set; }
     public bool IsStream => StreamTime >= 0;
-    public TopicData State { get; private set; }
 
     private void Start()
     {
@@ -61,7 +60,7 @@ public class TimeManager : MonoBehaviour
             await UniTask.Delay((int)(randTime * 1000), cancellationToken: token);
 
             Debug.Log("コメントジェネレーター発火");
-            CommentAction?.Invoke(State.Topic);
+            CommentAction?.Invoke(DataManager.Instance.TopicData.Topic);
         }
     }
 }
