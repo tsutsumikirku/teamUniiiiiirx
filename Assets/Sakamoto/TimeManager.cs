@@ -13,7 +13,7 @@ public class TimeManager : MonoBehaviour
 
     public System.Action<string> CommentAction;
 
-    Action<float> OnTimer;
+    public event Action<float> OnTimer;
 
     private int _topicIndex = 0;
     public float StreamTime { get; private set; }
