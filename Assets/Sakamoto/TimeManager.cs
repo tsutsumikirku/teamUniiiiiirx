@@ -54,7 +54,7 @@ public class TimeManager : MonoBehaviour
 
     private async UniTask AsyncGenerate(CancellationToken token)
     {
-        while (true)
+        while (IsStream)
         {
             float randTime = UnityEngine.Random.Range(_minTime, _maxTime);
             await UniTask.Delay((int)(randTime * 1000), cancellationToken: token);
