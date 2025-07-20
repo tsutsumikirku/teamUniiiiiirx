@@ -8,7 +8,7 @@ public class CommentGenerator : MonoBehaviour
     [SerializeField] Transform _uiParent;
 
     [ContextMenu("SetText")]
-    public void SetComment(string name)
+    public void SetComment()
     {
         Comment com = Instantiate(_commentData, transform.position, Quaternion.identity, _uiParent);
 
@@ -19,10 +19,4 @@ public class CommentGenerator : MonoBehaviour
         //var pair = ViewerManager.CSVReader.GetRandomCommentAndResponse("Common");
         //com.SetText(name, pair.Key);
     }
-
-    public void OnReply()
-    {
-        Debug.Log("返信されました");
-    }
-
 }

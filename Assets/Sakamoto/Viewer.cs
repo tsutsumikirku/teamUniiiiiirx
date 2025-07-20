@@ -33,7 +33,7 @@ public class Viewer
         {
             float randTime = UnityEngine.Random.Range(_minTime, _maxTime);
             await UniTask.Delay((int)(randTime * 1000), cancellationToken: token);
-            _generator.SetComment(Name);
+            _generator.SetComment();
         }
     }
     public void SetMaxTime(float max)
