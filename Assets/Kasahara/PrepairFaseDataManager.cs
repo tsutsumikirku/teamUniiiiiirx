@@ -12,10 +12,17 @@ public struct SerifData
 }
 public class PrepairFaseDataManager : MonoBehaviour
 {
-    [SerializeField]
-    PrepairFaseData faseData;
+    private string faseDataCsvPath = "FaseData.csv"; // デフォルトのCSVファイル名
+    public string PrepairFaseDataPath
+    {
+        get => faseDataCsvPath;
+        set
+        {
+            faseDataCsvPath = value;
+            LoadFaseData();
+        }
+    }
     [Header("Debug")]
-    [SerializeField] int day = 0; // デバッグ用の日付
     [SerializeField] int tension = 0; // デバッグ用の精神力
     [SerializeField] int money = 0; // デバッグ用の金額
 
@@ -24,25 +31,9 @@ public class PrepairFaseDataManager : MonoBehaviour
     {
         LoadFaseData();
     }
-    [ContextMenu("DebugLoadData")]
-    void LoadFaseData()
+    public void LoadFaseData()
     {
-        LoadFaseData(day);
-    }
-    public void LoadFaseData(int day)
-    {
-        day--;
-        if(faseData == null)
-        {
-            Debug.LogError("PrepairFaseDataが設定されていません。");
-            return;
-        }
-        if (day < 0 || day >= faseData.DayDatas.Length)
-        {
-            Debug.LogError($"無効な日付: {day}。範囲は1から{faseData.DayDatas.Length}までです。");
-            return;
-        }
-        string faseDataCsvPath = Path.Combine(Application.streamingAssetsPath, faseData.DayDatas[day].csvPath);
+        string faseDataCsvPath = Path.Combine(Application.streamingAssetsPath, PrepairFaseDataPath);
         if (File.Exists(faseDataCsvPath))
         {
             string[] lines = File.ReadAllLines(faseDataCsvPath);
