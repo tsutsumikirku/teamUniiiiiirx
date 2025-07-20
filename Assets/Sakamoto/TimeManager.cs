@@ -32,7 +32,7 @@ public class TimeManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Initialize()
+    public void Initialize()
     {
         _topicIndex = 0;
         OnTimer = null;

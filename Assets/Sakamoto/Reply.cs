@@ -11,10 +11,10 @@ public class Reply : MonoBehaviour
     {
         Data = data;
 
-        TimeManager.Instance.State.ChangeViewerLikedPoint(Data.LikePoint);
+        DataManager.Instance.ViewerLikedPointData.ChangeViewerLikedPoint(Data.LikePoint);
 
         DataManager.Instance.MentalData.ChangeMental(Data.MentalDamage);
 
-        TimeManager.Instance.State.ChangeState(Data.CommentType);
+        DataManager.Instance.TopicData.ChangeState(Data.CommentType);
     }
 }

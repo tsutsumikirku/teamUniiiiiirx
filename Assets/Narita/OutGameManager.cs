@@ -40,7 +40,7 @@ public class OutGameManager : MonoBehaviour
     /// </summary>
     public string GetSerif()
     {
-        int likedPoint = TimeManager.Instance.State.ViewerLikedPoint;
+        int likedPoint = DataManager.Instance.ViewerLikedPointData.CurrentLikedPoint;
         int money = DataManager.Instance.MoneyData.CurrentMoney;
         return _data.GetSerif(likedPoint, money);
     }
