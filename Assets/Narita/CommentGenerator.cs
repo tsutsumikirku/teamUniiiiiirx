@@ -24,7 +24,8 @@ public class CommentGenerator : MonoBehaviour
     [ContextMenu("SetText")]
     public void SetComment(string topic)
     {
-        Comment com = Instantiate(_commentData, transform.position, Quaternion.identity, _uiParent);
+        Comment com = Instantiate(_commentData,_uiParent);
+
 
         CommentAndResponseData data;
         if (topic != "" && _currentCount != 0)
