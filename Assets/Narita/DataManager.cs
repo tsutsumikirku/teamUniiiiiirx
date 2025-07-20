@@ -26,6 +26,5 @@ public class DataManager : MonoBehaviour
         MentalData.Initialize(_initialMental, _maxMental);
 
         MoneyData = new MoneyData();
-        ServiceLocater.Set(this);
     }
 }
