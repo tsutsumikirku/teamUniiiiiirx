@@ -5,19 +5,16 @@ using UnityEngine.UI;
 
 public class Comment : MonoBehaviour
 {
-    public string ReplyComment { get; private set; }
-    public string Name { get; private set; }
+    private CommentData _data;
     [SerializeField] Text _text;
-
     public void OnReply()
     {
         Debug.Log("Reply");
     }
 
-    public void SetText(string name, string reply)
+    public void SetData(CommentData data)
     {
-        Name = name;
-        ReplyComment = reply;
-        _text.text = $"{Name}\n{ReplyComment}";
+        _data = data;
+        _text.text = _data.Data.Comment;
     }
 }

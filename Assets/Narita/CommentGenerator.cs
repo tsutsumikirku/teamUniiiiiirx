@@ -5,25 +5,18 @@ using UnityEngine;
 public class CommentGenerator : MonoBehaviour
 {
     [SerializeField] Comment _commentData;
-    private string _comment;
-    private IViewer _viewer;
+    [SerializeField] Transform _uiParent;
 
     [ContextMenu("SetText")]
-    public void GetComment()
+    public void SetComment()
     {
-        _comment = "かわいいね";
-        Comment com = Instantiate(_commentData,FindAnyObjectByType<Canvas>().transform);
-        com.SetText("OMAE", _comment);
-    }
+        Comment com = Instantiate(_commentData, transform.position, Quaternion.identity, _uiParent);
 
-    public void SetInstance(IViewer viewer)
-    {
-        _viewer = viewer;
-    }
+        var data = new CommentAndResponseData();
+        data.Comment = "こんめむ～";
 
-    public void OnReply()
-    {
-        Debug.Log("返信されました");
+        com.SetData(new CommentData(data));
+        //var pair = ViewerManager.CSVReader.GetRandomCommentAndResponse("Common");
+        //com.SetText(name, pair.Key);
     }
-
 }
