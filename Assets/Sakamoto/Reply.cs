@@ -13,7 +13,7 @@ public class Reply : MonoBehaviour
 
         TimeManager.Instance.State.ChangeViewerLikedPoint(Data.LikePoint);
 
-        ServiceLocater.Get<MentalData>().ChangeMental(Data.MentalDamage);
+        DataManager.Instance.MentalData.ChangeMental(Data.MentalDamage);
 
         TimeManager.Instance.State.ChangeState(Data.CommentType);
     }
