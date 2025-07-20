@@ -23,15 +23,13 @@ public class FrameManage : MonoBehaviour
     {
         if (!_hpSlider) return;
         float before = _hpSlider.value;
-        DOTween.To(() => before, x => before = x, value, 0.2f)
-            .OnUpdate(() => _hpSlider.value = before);
+        _hpSlider.DOValue(value, 0.25f);
     }
     public void TimeSliderUpdate(float value)
     {
         if (!_timeSlider) return;
         float before = _timeSlider.value;
-        DOTween.To(() => before, x => before = x, value, 0.1f)
-            .OnUpdate(() => _timeSlider.value = before);
+        _timeSlider.DOValue(value, 0.25f);
     }
     public void DayTextUpdate(string value)
     {
