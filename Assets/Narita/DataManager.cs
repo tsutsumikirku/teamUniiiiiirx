@@ -13,6 +13,8 @@ public class DataManager : MonoBehaviour
 
     public CurrentTopicData TopicData { get; private set; }
 
+    public ViewerLikedPointData ViewerLikedPointData { get; private set; }
+
     [SerializeField] private int _maxDayCount = 7;
 
     [SerializeField] private int _initialMental = 100;
@@ -37,6 +39,8 @@ public class DataManager : MonoBehaviour
         DayData = new DayCounter(_maxDayCount);
 
         TopicData = new CurrentTopicData();
+
+        ViewerLikedPointData = new ViewerLikedPointData(_initialLikedPoint);
     }
     /// <summary>
     /// すべてを一括で初期化
@@ -50,6 +54,8 @@ public class DataManager : MonoBehaviour
         DayData.Initialize(_maxDayCount);
 
         TopicData.Initialize();
+
+        ViewerLikedPointData?.Initialize(_initialLikedPoint);
     }
 }
 [System.Serializable]
@@ -72,24 +78,24 @@ public class CurrentTopicData
 [System.Serializable]
 public class ViewerLikedPointData
 {
-    public int ViewerLikedPoint { get; private set; }
+    public int CurrentLikedPoint { get; private set; }
 
     Action<string, string> LikeabilityUpdate;
 
     public ViewerLikedPointData(int viewerLikedPoint)
     {
-        ViewerLikedPoint = viewerLikedPoint;
+        CurrentLikedPoint = viewerLikedPoint;
     }
 
     public void ChangeViewerLikedPoint(int viewerLikedPoint)
     {
-        ViewerLikedPoint += viewerLikedPoint;
-        LikeabilityUpdate?.Invoke(viewerLikedPoint.ToString(), ViewerLikedPoint.ToString());
+        CurrentLikedPoint += viewerLikedPoint;
+        LikeabilityUpdate?.Invoke(viewerLikedPoint.ToString(), CurrentLikedPoint.ToString());
     }
 
     public void Initialize(int viewerLikedPoint)
     {
-        ViewerLikedPoint = viewerLikedPoint;
+        CurrentLikedPoint = viewerLikedPoint;
         LikeabilityUpdate = null;
     }
 }

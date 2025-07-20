@@ -9,6 +9,7 @@ public class CommentGenerator : MonoBehaviour
     [SerializeField] private int _topicCount = 5;
     private int _currentCount = 0;
     private CommentDataManager _commentDataManager;
+    [SerializeField] private TimeManager _timeManger;
 
     private void Awake()
     {
@@ -17,13 +18,13 @@ public class CommentGenerator : MonoBehaviour
 
     private void Start()
     {
-        TimeManager.Instance.CommentAction += (topic) => SetComment(topic);
-        TimeManager.Instance.State.OnStateChange += () => _currentCount = _topicCount;
+        _timeManger.CommentAction += (topic) => SetComment(topic);
+        DataManager.Instance.TopicData.OnStateChange += () => _currentCount = _topicCount;
     }
     private void OnDisable()
     {
         TimeManager.Instance.CommentAction -= (topic) => SetComment(topic);
-        TimeManager.Instance.State.OnStateChange -= () => _currentCount = _topicCount;
+        DataManager.Instance.TopicData.OnStateChange -= () => _currentCount = _topicCount;
     }
 
     [ContextMenu("SetText")]
