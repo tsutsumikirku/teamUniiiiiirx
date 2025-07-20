@@ -30,22 +30,22 @@ public class FrameManage : MonoBehaviour
     {
         if (!_timeSlider) return;
         float before = _timeSlider.value;
-        DOTween.To(() => before, x => before = x, value, 0.2f)
+        DOTween.To(() => before, x => before = x, value, 0.1f)
             .OnUpdate(() => _timeSlider.value = before);
     }
     public void DayTextUpdate(string value)
     {
         if (!_dayText) return;
-        _dayText.text = value + _dayText.text;
+        _dayText.text = value + "日目";
     }
     public void LikePointUpdate(string value)
     {
         if (!_likePointText) return;
-        _likePointText.text = _likePointText.text + value;
+        _likePointText.text = "好感度:" + value;
     }
     public void MoneyUpdate(string value)
     {
         if (!_moneyText) return;
-        _moneyText.text = _moneyText.text + value;
+        _moneyText.text = "お金:" + value;
     }
 }
