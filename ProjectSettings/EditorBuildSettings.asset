@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Higashi/Scenes/AkitoTitle.unity
+    guid: 0e23720fa0908424d8fe8a09dc2f4625
+  - enabled: 1
+    path: Assets/Higashi/Scenes/AkitoIngame.unity
+    guid: 3c3512b3de732104a987d26c6f70ba14
   m_configObjects: {}
