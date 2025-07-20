@@ -19,7 +19,7 @@ public class ServiceLocater
         }
     }
 
-    public static object Get<T>()
+    public static T Get<T>()
     {
         if (_services.TryGetValue(typeof(T), out var service))
         {
