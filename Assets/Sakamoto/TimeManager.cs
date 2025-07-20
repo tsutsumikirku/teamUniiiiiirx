@@ -92,7 +92,7 @@ public class State
     public string Topic { get; private set; } = "";
 
     private event Action<string> _action;
-    public Action OnStateChange { get; set; }
+    public event Action OnStateChange;
 
     public State(int viewerLikedPoint, Action<string> action)
     {

@@ -15,4 +15,9 @@ public class MoneyData
     {
         CurrentMoney = Mathf.Max(CurrentMoney + money, 0);
     }
+
+    public bool IsUseMoney(int money)
+    {
+        return CurrentMoney - money >= 0;
+    }
 }

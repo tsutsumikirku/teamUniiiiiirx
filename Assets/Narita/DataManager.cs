@@ -8,8 +8,12 @@ public class DataManager : MonoBehaviour
 
     public MentalData MentalData { get; private set; }
     public MoneyData MoneyData { get; private set; }
-    [SerializeField] int _initialMental = 100;
-    [SerializeField] int _maxMental = 100;
+    public DayCounter DayData { get; private set; }
+
+    [SerializeField] private int _maxDayCount = 7;
+
+    [SerializeField] private int _initialMental = 100;
+    [SerializeField] private int _maxMental = 100;
 
     private void Awake()
     {
@@ -22,9 +26,10 @@ public class DataManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        MentalData = new MentalData();
-        MentalData.Initialize(_initialMental, _maxMental);
+        MentalData = new MentalData(_initialMental, _maxMental);
 
         MoneyData = new MoneyData();
+
+        DayData = new DayCounter(_maxDayCount);
     }
 }
