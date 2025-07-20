@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class Comment : MonoBehaviour
 {
+    [SerializeField] private int _minusLikedPoint = 15;
     public CommentAndResponseData Data { get; private set; }
     public CommentType CommentType { get; private set; }
     public void SetData(CommentData data)
@@ -24,9 +25,17 @@ public class Comment : MonoBehaviour
 
         if (!TryGetComponent<TextMeshProUGUI>(out var tmp)) return;
         tmp.text = Data.Comment;
-        
+
         if (!TryGetComponent<ChatMove>(out var chatMove)) return;
         chatMove.data = Data;
+    }
+
+    public void OnThrowEvent()
+    {
+        if (CommentType == CommentType.Super)
+        {
+            DataManager.Instance.ViewerLikedPointData.ChangeViewerLikedPoint(-_minusLikedPoint);
+        }
     }
 }
 public enum CommentType
