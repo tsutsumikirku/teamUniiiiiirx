@@ -24,9 +24,8 @@ public class Comment : MonoBehaviour
             DataManager.Instance.MoneyData.ChangeMoney(Data.Money);
         }
 
-        if (!TryGetComponent<TextMeshProUGUI>(out var tmp)) return;
-        tmp.text = Data.Comment;
-
+        if (!TryGetComponent<ChatDetail>(out var chat)) return;
+        chat.SetChatDetail(CommentType, Data.Comment);
         if (!TryGetComponent<ChatMove>(out var chatMove)) return;
         chatMove._data = Data;
     }

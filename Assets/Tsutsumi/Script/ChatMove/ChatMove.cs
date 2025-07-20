@@ -14,21 +14,25 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     [SerializeField] private float _xMaxDistance = -1000f;
     [SerializeField] private float _yMinDistance = -1000f;
     [SerializeField] private float _yMaxDistance = 0;
+    [SerializeField] private float _collision = 50f;
     private bool _isEnd = false;
     private bool _isMoving;
     private bool _isDragging;
     private RectTransform _rectTransform;
     private Vector2 _initialScale;
     private Vector2 _dragPosition;
+    private Vector2 _characterPosition;
     public CommentAndResponseData _data;
 
-    void Awake()
+    async UniTask Awake()
     {
         _initialScale = transform.localScale;
         _rectTransform = GetComponent<RectTransform>();
         _rectTransform.anchoredPosition = new Vector2(_rectTransform.anchoredPosition.x, Random.Range(_yMinDistance, _yMaxDistance));
         var frameObj = GameObject.FindWithTag("Frame");
+        FindObjectOfType<FrameManage>().LayerUpdate();
         _isMoving = true;
+        _characterPosition = GameObject.FindWithTag("Player").GetComponent<RectTransform>().anchoredPosition;
         UniTaskMove().Forget();
     }
     async UniTask UniTaskMove()
@@ -36,25 +40,55 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         CancellationToken cancellationToken = this.GetCancellationTokenOnDestroy();
         while (_isMoving)
         {
-            if (_isEnd) return;
-            while (_isDragging)
+            if (_data.MentalDamage < 0)
             {
-                _rectTransform.anchoredPosition = (Vector2)Input.mousePosition - _dragPosition;
-                await UniTask.Yield(cancellationToken);
+                if (_isEnd) return;
+                while (_isDragging)
+                {
+                    _rectTransform.anchoredPosition = (Vector2)Input.mousePosition - _dragPosition;
+                    await UniTask.Yield(cancellationToken);
+                }
+                _rectTransform.anchoredPosition += new Vector2(_speed * Time.deltaTime, 0) + ((_characterPosition - _rectTransform.anchoredPosition).normalized * 100);
+                if (Mathf.Abs((_characterPosition - _rectTransform.anchoredPosition).x * (_characterPosition - _rectTransform.anchoredPosition).x + 
+                (_characterPosition - _rectTransform.anchoredPosition).y * (_characterPosition - _rectTransform.anchoredPosition).y) < _collision)
+                {
+                    var chara = GameObject.FindWithTag("Player");
+                    if (!chara.TryGetComponent<Reply>(out var reply)) return;
+                    reply.SaveState(_data);
+                    if (!chara.TryGetComponent<CharacterTextManager>(out var characterText)) return;
+                    characterText.TextUpdate(_data.Response);
+                    End();
+                }
             }
-            _rectTransform.anchoredPosition += new Vector2(_speed * Time.deltaTime, 0);
-            if (_xMaxDistance > _rectTransform.anchoredPosition.x + _rectTransform.rect.width / 2)
+            else
             {
-                _isMoving = false;
+                if (_isEnd) return;
+                while (_isDragging)
+                {
+                    _rectTransform.anchoredPosition = (Vector2)Input.mousePosition - _dragPosition;
+                    await UniTask.Yield(cancellationToken);
+                }
+                _rectTransform.anchoredPosition += new Vector2(_speed * Time.deltaTime, 0);
+                if (_xMaxDistance > _rectTransform.anchoredPosition.x + _rectTransform.rect.width / 2)
+                {
+                    _isMoving = false;
+                }
             }
             await UniTask.Delay(1, cancellationToken: cancellationToken);
         }
+        if (!TryGetComponent<Comment>(out var comment))
+        {
+            Destroy(gameObject);
+            return;
+        }
+        comment.OnThrowEvent();
         Destroy(gameObject);
     }
-    async UniTask End()
+    
+    void End()
     {
         _isEnd = true;
-        transform.DOScale(0f,0.2f).OnComplete(() => Destroy(gameObject));
+        transform.DOScale(0f, 0.2f).OnComplete(() => Destroy(gameObject));
     }
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -74,7 +108,7 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 reply.SaveState(_data);
                 if (!result.gameObject.TryGetComponent<CharacterTextManager>(out var characterText)) return;
                 characterText.TextUpdate(_data.Response);
-                End().Forget();
+                End();
             }
         }
     } 

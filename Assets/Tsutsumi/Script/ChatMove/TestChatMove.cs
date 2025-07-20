@@ -12,6 +12,5 @@ public class TestChatMove : MonoBehaviour
     public void Test()
     {
         chatMove = Instantiate(_chatMove, FindAnyObjectByType<Canvas>().transform);
-        
     }
 }
