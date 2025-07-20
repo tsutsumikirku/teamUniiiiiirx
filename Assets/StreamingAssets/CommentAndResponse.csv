@@ -1,3 +1,7 @@
-﻿CommentType,ViewerComment,Response1,Flattery Points1,Response2,Flattery Points2,Response3,Flattery Points3
-Common,ういちゃん今日もかわいいね♡,キモ,5,うえぇ,3,ありがとー！うれしいー！,20
-Anti,ブサイクだなwww,ブサイクじゃないでーす,-10,みんなー私ってかわいいよね？,-20,,
+﻿CommentType,id,ViewerComment,Response,精神ダメージ,好感度ポイント,話題,モーション,スパチャ額
+Common,0,8888888888,パチパチ～,0,1,,未定,0
+Common,1,初見です,初見さんよろしくー,0,1,,未定,0
+EarlyStage,2,風呂入ってる？,お湯出ないんだよねー,0,1,風呂,未定,0
+風呂,3,水道止められてるの可哀想,水道代払えないんだよー,0,1,,未定,0
+風呂,4,水道代,ありがとー！,0,10,,未定,500
+風呂,5,くさそう,臭くないもん,5,2,,未定,0
