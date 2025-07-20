@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Comment : MonoBehaviour
 {
-    private CommentData _data;
+    public CommentData Data { get; private set; }
     [SerializeField] Text _text;
     public void OnReply()
     {
@@ -14,7 +14,7 @@ public class Comment : MonoBehaviour
 
     public void SetData(CommentData data)
     {
-        _data = data;
-        _text.text = _data.Data.Comment;
+        Data = data;
+        _text.text = Data.Data.Comment;
     }
 }
