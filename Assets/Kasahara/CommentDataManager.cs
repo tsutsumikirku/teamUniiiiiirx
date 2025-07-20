@@ -15,10 +15,10 @@ public struct CommentAndResponseData
     public string MotionType;//モーションタイプ
     public int Money;//スパチャ額
 }
-public class CommentDataManager : MonoBehaviour
+public class CommentDataManager
 {
     readonly Dictionary<string, HashSet<CommentAndResponseData>> commentAndResponseData = new Dictionary<string, HashSet<CommentAndResponseData>>();
-    void Start()
+    public CommentDataManager()
     {
         LoadCommentData();
     }
@@ -30,7 +30,7 @@ public class CommentDataManager : MonoBehaviour
             string[] lines = File.ReadAllLines(commentCsvPath);
             foreach (string line in lines.Skip(1))
             {
-                string[] values = line.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
+                string[] values = line.Split(',');
                 if (commentAndResponseData.TryGetValue(values[0], out var datas))
                 {
                     datas.Add(new CommentAndResponseData
@@ -71,13 +71,27 @@ public class CommentDataManager : MonoBehaviour
     }
     public CommentAndResponseData GetCommentData()
     {
-        return GetCommentData("Common");
+        CommentAndResponseData data = new CommentAndResponseData();
+        GetCommentData("Common", ref data);
+        return data;
     }
-    public CommentAndResponseData GetCommentData(string type)
+    public bool GetCommentData(string type, ref CommentAndResponseData data)
     {
         //ランダムにコメントデータを取得する例を示します。
-        return commentAndResponseData.TryGetValue(type, out var datas) && datas.Count > 0
-             ? datas.ElementAt(Random.Range(0, datas.Count))
-             : new CommentAndResponseData();
+        if (commentAndResponseData.TryGetValue(type, out var datas))
+        {
+            if (datas.Count > 0)
+            {
+                var randomData = datas.ElementAt(Random.Range(0, datas.Count));
+                data = randomData;
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+            Debug.LogWarning($"指定されたコメントタイプ '{type}' のデータが見つかりません。");
+            return false;
+        }
     }
 }
