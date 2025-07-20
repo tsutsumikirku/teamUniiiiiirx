@@ -20,7 +20,7 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     private RectTransform _rectTransform;
     private Vector2 _initialScale;
     private Vector2 _dragPosition;
-    public CommentAndResponseData data;
+    public CommentAndResponseData _data;
 
     void Awake()
     {
@@ -71,7 +71,9 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             if (result.gameObject.tag == "Player")
             {
                 if (!result.gameObject.TryGetComponent<Reply>(out var reply)) return;
-                reply.SaveState(data);
+                reply.SaveState(_data);
+                if (!result.gameObject.TryGetComponent<CharacterTextManager>(out var characterText)) return;
+                characterText.TextUpdate(_data.Response);
                 End().Forget();
             }
         }

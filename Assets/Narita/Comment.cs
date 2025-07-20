@@ -27,7 +27,7 @@ public class Comment : MonoBehaviour
         tmp.text = Data.Comment;
 
         if (!TryGetComponent<ChatMove>(out var chatMove)) return;
-        chatMove.data = Data;
+        chatMove._data = Data;
     }
 
     public void OnThrowEvent()
