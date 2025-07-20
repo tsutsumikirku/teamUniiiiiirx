@@ -95,12 +95,15 @@ public class CommentDataManager
                 data = randomData;
                 return true;
             }
+            Debug.LogWarning($"指定されたコメントタイプ '{type}' のコメントデータがありません。");
             return false;
         }
         else
         {
-            Debug.LogWarning($"指定されたコメントタイプ '{type}' のデータが見つかりません。");
-            return false;
+            Debug.LogWarning($"指定されたコメントタイプ '{type}' が見つかりません。");
+            //return false;
+            data = GetCommentData();
+            return true;
         }
     }
     public CommentAndResponseData GetSuperChatData()
@@ -120,12 +123,15 @@ public class CommentDataManager
                 data = randomData;
                 return true;
             }
+            Debug.LogWarning($"指定されたコメントタイプ '{type}' のスパチャデータがありません。");
             return false;
         }
         else
         {
-            Debug.LogWarning($"指定されたコメントタイプ '{type}' のデータが見つかりません。");
-            return false;
+            Debug.LogWarning($"指定されたコメントタイプ '{type}' が見つかりません。");
+            //return false;
+            data = GetSuperChatData();
+            return true;
         }
     }
 }
