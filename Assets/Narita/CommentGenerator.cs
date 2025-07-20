@@ -16,15 +16,15 @@ public class CommentGenerator : MonoBehaviour
         _commentDataManager = new CommentDataManager();
         _timeManger.CommentAction += SetComment;
         DataManager.Instance.TopicData.OnStateChange += Initialize;
+        DataManager.Instance.ViewerLikedPointData.OnAddPoint += SetSuperChat;
     }
 
-    private void Start()
-    {
-    }
     private void OnDisable()
     {
         _timeManger.CommentAction -= SetComment;
         DataManager.Instance.TopicData.OnStateChange -= Initialize;
+        DataManager.Instance.ViewerLikedPointData.OnAddPoint -= SetSuperChat;
+
     }
 
     private void Initialize()
@@ -52,6 +52,33 @@ public class CommentGenerator : MonoBehaviour
     }
     public void SetSuperChat()
     {
+        string topic = DataManager.Instance.TopicData.Topic;
 
+        int value = DataManager.Instance.ViewerLikedPointData.CurrentLikedPoint / 2;
+
+        int rand = Random.Range(0, DataManager.Instance.ViewerLikedPointData.MaxLikedPoint + 1);
+
+        if (rand > value)
+        {
+            SetComment(topic);
+            return;
+        }
+
+        Comment com = Instantiate(_commentData, _uiParent);
+
+        CommentAndResponseData data;
+        if (!string.IsNullOrEmpty(topic) && _currentCount != 0)
+        {
+            data = new CommentAndResponseData();
+            _commentDataManager.GetSuperChatData(topic, ref data);
+            _currentCount--;
+            Debug.LogError(data.Comment + data.Money);
+        }
+        else
+        {
+            data = _commentDataManager.GetSuperChatData();
+        }
+
+        com.SetData(new CommentData(data));
     }
 }
