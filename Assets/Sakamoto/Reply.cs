@@ -1,30 +1,20 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Reply : MonoBehaviour
 {
-    private MentalData _mentalData;
-    private int _viewerLikedPoint;
-    private int _playerMental;
-    private string _topic;
-
-    private void Start()
-    {
-        if (_mentalData == null)
-        {
-            _mentalData = GetComponent<MentalData>();
-        }
-    }
+    public CommentAndResponseData Data { get; private set; }
 
     public void SaveState(CommentAndResponseData data)
     {
-        _viewerLikedPoint = data.LikePoint;
-        TimeManager.Instance.State.ChangeViewerLikedPoint(_viewerLikedPoint);
-        _playerMental = data.MentalDamage;
-        _mentalData.ChangeMental(_playerMental);
-        _topic = data.CommentType;
-        TimeManager.Instance.State.ChangeState(_topic);
+        Data = data;
+
+        TimeManager.Instance.State.ChangeViewerLikedPoint(Data.LikePoint);
+
+        ServiceLocater.Get<MentalData>().ChangeMental(Data.MentalDamage);
+
+        TimeManager.Instance.State.ChangeState(Data.CommentType);
     }
 }
