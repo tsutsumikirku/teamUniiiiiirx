@@ -73,6 +73,7 @@ public class CurrentTopicData
     public void Initialize()
     {
         Topic = "";
+        OnStateChange = null;
     }
 }
 [System.Serializable]
@@ -80,7 +81,7 @@ public class ViewerLikedPointData
 {
     public int CurrentLikedPoint { get; private set; }
 
-    Action<string, string> LikeabilityUpdate;
+    public event Action<string, string> LikeabilityUpdate;
 
     public ViewerLikedPointData(int viewerLikedPoint)
     {
