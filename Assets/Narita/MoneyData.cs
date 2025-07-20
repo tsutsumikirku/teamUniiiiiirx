@@ -7,7 +7,7 @@ using UnityEngine;
 public class MoneyData
 {
     public int CurrentMoney { get; private set; }
-    Action<string, string> CoinViewUpdate;
+    public event Action<string, string> CoinViewUpdate;
 
     public void Initialize()
     {
