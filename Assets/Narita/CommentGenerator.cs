@@ -14,27 +14,30 @@ public class CommentGenerator : MonoBehaviour
     private void Awake()
     {
         _commentDataManager = new CommentDataManager();
+        _timeManger.CommentAction += SetComment;
+        DataManager.Instance.TopicData.OnStateChange += Initialize;
     }
 
     private void Start()
     {
-        _timeManger.CommentAction += (topic) => SetComment(topic);
-        DataManager.Instance.TopicData.OnStateChange += () => _currentCount = _topicCount;
     }
     private void OnDisable()
     {
-        _timeManger.CommentAction -= (topic) => SetComment(topic);
-        DataManager.Instance.TopicData.OnStateChange -= () => _currentCount = _topicCount;
+        _timeManger.CommentAction -= SetComment;
+        DataManager.Instance.TopicData.OnStateChange -= Initialize;
     }
 
-    [ContextMenu("SetText")]
+    private void Initialize()
+    {
+        _currentCount = _topicCount;
+    }
+
     public void SetComment(string topic)
     {
         Comment com = Instantiate(_commentData, _uiParent);
 
-
         CommentAndResponseData data;
-        if (topic != "" && _currentCount != 0)
+        if (!string.IsNullOrEmpty(topic) && _currentCount != 0)
         {
             data = new CommentAndResponseData();
             _commentDataManager.GetCommentData(topic, ref data);
@@ -46,5 +49,9 @@ public class CommentGenerator : MonoBehaviour
         }
 
         com.SetData(new CommentData(data));
+    }
+    public void SetSuperChat()
+    {
+
     }
 }
