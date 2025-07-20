@@ -13,7 +13,7 @@ public class TimeManager : MonoBehaviour
 
     public System.Action<string> CommentAction;
 
-    public event Action<float> OnTimer;
+    public event Action<float, float> OnTimer;
 
     private int _topicIndex = 0;
     public float StreamTime { get; private set; }
@@ -46,7 +46,7 @@ public class TimeManager : MonoBehaviour
                 }
             }
             await UniTask.Yield(cancellationToken: token);
-            OnTimer?.Invoke(StreamTime / streamTime);
+            OnTimer?.Invoke(StreamTime / streamTime, StreamTime);
         }
 
         Debug.Log("ストリーム終了");

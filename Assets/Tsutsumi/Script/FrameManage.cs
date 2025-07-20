@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
@@ -14,12 +12,11 @@ public class FrameManage : MonoBehaviour
     [Header("時間のスライダーを設定してください")]
     [SerializeField] private Slider _timeSlider;
 
+    [Header("時間のテキストを設定してください")]
+    [SerializeField] private TextMeshProUGUI _timeText;
+
     [Header("残り日数のテキストを設定してください")]
     [SerializeField] private TextMeshProUGUI _dayText;
-
-    [Header("残りの日数のアップデートのテキストを設定してください")]
-    [SerializeField] private TextMeshProUGUI _dayInText;
-
     [Header("好感度のテキストを設定してください")]
     [SerializeField] private TextMeshProUGUI _likePointText;
 
@@ -45,20 +42,24 @@ public class FrameManage : MonoBehaviour
         DataManager.Instance.MoneyData.CoinViewUpdate += MoneyUpdate;
         FindObjectOfType<TimeManager>().OnTimer += TimeSliderUpdate;
         DayTextUpdate(DataManager.Instance.DayData.CurrentDay.ToString());
+        HPSliderUpdate(DataManager.Instance.MentalData.CurrentMental / 100);
+        _likePointText.text = "好感度:" + 0;
+        _moneyText.text = "お金:" + 0;
     }
-    public void HPSliderUpdate(float value)
+    private void HPSliderUpdate(float value)
     {
         Debug.Log("HPスライダー更新: " + value);
         _hpTween?.Kill();
         if (!_hpSlider) return;
         _hpTween = _hpSlider.DOValue(value, 0.25f);
     }
-    public void TimeSliderUpdate(float value)
+    private void TimeSliderUpdate(float value1, float value2)
     {
-        value = Mathf.Abs(value - 1f);
+        value1 = Mathf.Abs(value1 - 1f);
         _timeTween?.Kill();
         if (!_timeSlider) return;
-        _timeTween = _timeSlider.DOValue(value, 0.25f);
+        _timeTween = _timeSlider.DOValue(value1, 0.25f);
+        _timeText.text = Mathf.Abs(value2 - 60).ToString("00:00");
     }
     private void DayTextUpdate(string value1)
     {
@@ -69,7 +70,8 @@ public class FrameManage : MonoBehaviour
     {
         if (!_likePointText) return;
         _likePointText.text = "好感度:" + value2;
-        if(!_likePointInText) return;
+        if (!_likePointInText) return;
+        _likePointInText.gameObject.SetActive(false);
         _likePointInText.text = "+" + value1;
         _likePointInText.gameObject.SetActive(true);
     }
@@ -78,7 +80,12 @@ public class FrameManage : MonoBehaviour
         if (!_moneyText) return;
         _moneyText.text = "お金:" + value2;
         if (!_moneyInText) return;
+        _moneyInText.gameObject.SetActive(false);
         _moneyInText.text = "+" + value1;
         _moneyInText.gameObject.SetActive(true);
+    }
+    public void LayerUpdate()
+    {
+        transform.SetAsLastSibling();
     }
 }
