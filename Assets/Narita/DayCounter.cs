@@ -1,19 +1,16 @@
 ﻿using UnityEngine;
 
-public class DayCounter : MonoBehaviour
+public class DayCounter
 {
-    [SerializeField] private int _maxDayCount = 7;
-    private int _currentDay;
+    public int CurrentDay { get; private set; }
 
-    public bool HasReachedMaxDays => _currentDay >= _maxDayCount;
-
-    private void Awake()
+    public DayCounter(int dayCount)
     {
-        ServiceLocater.Set(this);
+        CurrentDay = dayCount;
     }
 
     public void AdvanceOneDay()
     {
-        _currentDay++;
+        CurrentDay--;
     }
 }

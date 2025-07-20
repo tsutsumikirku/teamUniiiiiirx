@@ -8,7 +8,7 @@ public class MentalData
     private int _maxMental = 100;
     public int CurrentMental { get; private set; }
 
-    public void Initialize(int initialMental, int max)
+    public MentalData(int initialMental, int max)
     {
         CurrentMental = initialMental;
         _maxMental = max;
