@@ -8,44 +8,26 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private TopicData[] _topicDaters;
     [SerializeField] private float _streamTimeLimit = 60f;
     [SerializeField] private float _maxTime = 5, _minTime = 1;
-    [SerializeField] private int _viewerLiked = 0;
-    [SerializeField] private int _viewerCount = 5;
-    [SerializeField] private FrameManage _frameManage;
 
-    public static TimeManager Instance;
+    [SerializeField] private int _viewerCount = 5;
 
     public System.Action<string> CommentAction;
+
+    Action<float> OnTimer;
 
     private int _topicIndex = 0;
     public float StreamTime { get; private set; }
     public bool IsStream => StreamTime >= 0;
-    public State State { get; private set; }
+    public TopicData State { get; private set; }
 
-    private void Awake()
+    private void Start()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-        }
-        Instance = this;
-        State = new State(_viewerLiked, _frameManage.LikePointUpdate);
-        DontDestroyOnLoad(gameObject);
-    }
-
-    private void Initialize()
-    {
-        _topicIndex = 0;
         CancellationTokenSource cts = new CancellationTokenSource();
         for (int i = 0; i < _viewerCount; i++)
         {
             AsyncGenerate(cts.Token).Forget();
         }
         AsyncTimer(_streamTimeLimit, cts.Token).Forget();
-    }
-
-    private void Start()
-    {
-        Initialize();
     }
 
     public async UniTask AsyncTimer(float streamTime, CancellationToken token)
@@ -55,17 +37,17 @@ public class TimeManager : MonoBehaviour
         while (StreamTime > 0)
         {
             StreamTime -= Time.deltaTime;
-            _frameManage.TimeSliderUpdate((streamTime - StreamTime) / streamTime);
+
             if (_topicIndex < _topicDaters.Length)
             {
                 if (StreamTime <= _topicDaters[_topicIndex].Time)
                 {
-                    State.ChangeState(_topicDaters[_topicIndex].Topic);
-                    _frameManage.LikePointUpdate(State.ViewerLikedPoint.ToString());
+                    DataManager.Instance.TopicData.ChangeState((string)_topicDaters[(int)_topicIndex].Topic);
                     _topicIndex++;
                 }
             }
             await UniTask.Yield(cancellationToken: token);
+            OnTimer?.Invoke(StreamTime / streamTime);
         }
 
         Debug.Log("ストリーム終了");
@@ -83,36 +65,6 @@ public class TimeManager : MonoBehaviour
         }
     }
 }
-public class State
-{
-    public int ViewerLikedPoint { get; private set; }
-
-    string _topic;
-
-    public string Topic { get; private set; } = "";
-
-    private event Action<string> _action;
-    public event Action OnStateChange;
-
-    public State(int viewerLikedPoint, Action<string> action)
-    {
-        ViewerLikedPoint = viewerLikedPoint;
-        _action = action;
-    }
-
-    public void ChangeState(string topic)
-    {
-        Topic = topic;
-        OnStateChange?.Invoke();
-    }
-
-    public void ChangeViewerLikedPoint(int viewerLikedPoint)
-    {
-        ViewerLikedPoint += viewerLikedPoint;
-        _action?.Invoke(ViewerLikedPoint.ToString());
-    }
-}
-
 [System.Serializable]
 public class TopicData
 {
