@@ -80,6 +80,7 @@ public class CurrentTopicData
 [System.Serializable]
 public class ViewerLikedPointData
 {
+    public int BeforeLikedPoint { get; private set; }
     public int CurrentLikedPoint { get; private set; }
     public int MaxLikedPoint { get; private set; }
 
@@ -89,6 +90,7 @@ public class ViewerLikedPointData
     public ViewerLikedPointData(int viewerLikedPoint)
     {
         MaxLikedPoint = viewerLikedPoint;
+        BeforeLikedPoint = CurrentLikedPoint;
     }
 
     public void ChangeViewerLikedPoint(int viewerLikedPoint)
@@ -104,6 +106,7 @@ public class ViewerLikedPointData
 
     public void Initialize()
     {
+        BeforeLikedPoint = CurrentLikedPoint;
         CurrentLikedPoint = 0;
         LikeabilityUpdate = null;
         OnAddPoint = null;

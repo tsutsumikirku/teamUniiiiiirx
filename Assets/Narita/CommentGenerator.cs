@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class CommentGenerator : MonoBehaviour
 {
-    [SerializeField] private Comment _commentData;
-    [SerializeField] private Transform _uiParent;
-    [SerializeField] private int _topicCount = 5;
+    [SerializeField, Header("コメントのプレハブ")] private Comment _commentData;
+
+    [SerializeField, Header("Canvas下のオブジェクト")] private Transform _uiParent;
+
+    [SerializeField, Header("話題に対するコメントの出現数")] private int _topicCount = 5;
+
     private int _currentCount = 0;
+
     private CommentDataManager _commentDataManager;
-    [SerializeField] private TimeManager _timeManger;
+
+    [SerializeField, Header("タイムマネージャー")] private TimeManager _timeManger;
 
     private void Awake()
     {
@@ -31,18 +36,23 @@ public class CommentGenerator : MonoBehaviour
     {
         _currentCount = _topicCount;
     }
-
+    /// <summary>
+    /// コメント生成
+    /// </summary>
+    /// <param name="topic"></param>
     public void SetComment(string topic)
     {
         Comment com = Instantiate(_commentData, _uiParent);
 
         CommentAndResponseData data;
+
         if (!string.IsNullOrEmpty(topic) && _currentCount != 0)
         {
             data = new CommentAndResponseData();
             _commentDataManager.GetCommentData(topic, ref data);
             _currentCount--;
         }
+        //話題がなかったら、または、話題生成の上限に達していたら
         else
         {
             data = _commentDataManager.GetCommentData();
