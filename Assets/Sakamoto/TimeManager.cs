@@ -101,7 +101,6 @@ public class State
     {
         Topic = topic;
         OnStateChange?.Invoke();
-        Debug.LogError("StateChange");
     }
 
     public void ChangeViewerLikedPoint(int viewerLikedPoint)
