@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MentalData : MonoBehaviour
+public class MentalData
 {
-    [SerializeField] private int _initialMental = 100;
-    [SerializeField] private int _maxMental = 100;
+    private int _maxMental = 100;
     public int CurrentMental { get; private set; }
-    private void Awake()
+
+    public void Initialize(int initialMental, int max)
     {
-        ServiceLocater.Set(this);
-        CurrentMental = _initialMental;
+        CurrentMental = initialMental;
+        _maxMental = max;
     }
 
     /// <summary>
