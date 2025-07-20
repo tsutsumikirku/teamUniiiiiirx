@@ -1,20 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Comment : MonoBehaviour
 {
-    public CommentData Data { get; private set; }
-    [SerializeField] Text _text;
-    public void OnReply()
-    {
-        Debug.Log("Reply");
-    }
-
+    public CommentAndResponseData Data { get; private set; }
     public void SetData(CommentData data)
     {
-        Data = data;
-        _text.text = Data.Data.Comment;
+        Data = data.Data;
+        if (!TryGetComponent<TextMeshProUGUI>(out var tmp)) return;
+        tmp.text = Data.Comment;
+        if (!TryGetComponent<ChatMove>(out var chatMove)) return;
+        chatMove.data = Data;
     }
 }
