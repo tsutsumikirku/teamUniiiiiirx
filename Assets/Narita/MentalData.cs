@@ -19,6 +19,6 @@ public class MentalData : MonoBehaviour
     /// <param name="value">正か負かで加減算</param>
     public void ChangeMental(int value)
     {
-        CurrentMental += value;
+        CurrentMental = Mathf.Min(CurrentMental + value, _maxMental);
     }
 }
