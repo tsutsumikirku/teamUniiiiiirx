@@ -1,27 +1,23 @@
-using System.Threading;
+ï»¿using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
+    [SerializeField] private TopicData[] _topicDaters;
     [SerializeField] private float _streamTimeLimit = 60f;
     [SerializeField] private float _maxTime = 5, _minTime = 1;
     [SerializeField] private int _viewerLiked = 0;
-    [SerializeField] private int _viewerCount = 0;
-    [SerializeField] private int _maxViewerCount = 50;
+    [SerializeField] private int _viewerCount = 5;
+
     public static TimeManager Instance;
-    public System.Action CommentAction;
+
+    public System.Action<string> CommentAction;
+
+    private int _topicIndex = 0;
     public float StreamTime { get; private set; }
     public bool IsStream => StreamTime >= 0;
     public State State { get; private set; }
-
-    //public TimeManager(float streamTime)
-    //{
-    //    //StreamTime = streamTime;
-    //    CancellationTokenSource cts = new CancellationTokenSource();
-    //    LoopAsync(cts.Token).Forget();
-    //    StartStream(streamTime,cts.Token).Forget();
-    //}
 
     private void Awake()
     {
@@ -33,28 +29,44 @@ public class TimeManager : MonoBehaviour
         State = new State(_viewerLiked);
         DontDestroyOnLoad(gameObject);
     }
-    private void Start()
+
+    private void Initialize()
     {
+        _topicIndex = 0;
         CancellationTokenSource cts = new CancellationTokenSource();
-        for (int i = _viewerCount; i < _viewerLiked; i++)
+        for (int i = 0; i < _viewerCount; i++)
         {
             AsyncGenerate(cts.Token).Forget();
         }
         AsyncTimer(_streamTimeLimit, cts.Token).Forget();
     }
 
+    private void Start()
+    {
+        Initialize();
+    }
+
     public async UniTask AsyncTimer(float streamTime, CancellationToken token)
     {
-        Debug.Log("”zMŠJŽn");
+        Debug.Log("é…ä¿¡é–‹å§‹");
         StreamTime = streamTime;
 
         while (StreamTime > 0)
         {
             StreamTime -= Time.deltaTime;
+            if (_topicIndex < _topicDaters.Length)
+            {
+                if (StreamTime <= _topicDaters[_topicIndex].Time)
+                {
+                    State.ChangeState(_topicDaters[_topicIndex].Topic);
+                    _topicIndex++;
+                }
+            }
+
             await UniTask.Yield(cancellationToken: token);
         }
 
-        Debug.Log("ƒXƒgƒŠ[ƒ€I—¹");
+        Debug.Log("ã‚¹ãƒˆãƒªãƒ¼ãƒ çµ‚äº†");
     }
 
     private async UniTask AsyncGenerate(CancellationToken token)
@@ -63,15 +75,22 @@ public class TimeManager : MonoBehaviour
         {
             float randTime = UnityEngine.Random.Range(_minTime, _maxTime);
             await UniTask.Delay((int)(randTime * 1000), cancellationToken: token);
-            Debug.Log("ƒRƒƒ“ƒgƒWƒFƒlƒŒ[ƒ^[”­‰Î");
-            CommentAction?.Invoke();
+
+            Debug.Log("ã‚³ãƒ¡ãƒ³ãƒˆã‚¸ã‚§ãƒãƒ¬ãƒ¼ã‚¿ãƒ¼ç™ºç«");
+            CommentAction?.Invoke(State.Topic);
         }
     }
 }
 public class State
 {
     public int ViewerLikedPoint { get; private set; }
-    public string Topic { get; private set; }
+
+    string _topic;
+
+    public string Topic { get; private set; } = "";
+
+
+    public System.Action OnStateChange { get; set; }
 
     public State(int viewerLikedPoint)
     {
@@ -81,10 +100,22 @@ public class State
     public void ChangeState(string topic)
     {
         Topic = topic;
+        OnStateChange?.Invoke();
     }
 
     public void ChangeViewerLikedPoint(int viewerLikedPoint)
     {
         ViewerLikedPoint = viewerLikedPoint;
     }
+}
+
+[System.Serializable]
+public class TopicData
+{
+    [SerializeField, Header("è©±é¡Œã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ã‚¿ã‚¤ãƒŸãƒ³ã‚°(æ®‹ã‚Šæ™‚é–“)")] int _time;
+
+    [SerializeField, Header("è©±é¡Œ")] string _topic;
+
+    public int Time => _time;
+    public string Topic => _topic;
 }
