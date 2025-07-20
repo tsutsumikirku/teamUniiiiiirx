@@ -20,11 +20,16 @@ public class CommentGenerator : MonoBehaviour
         TimeManager.Instance.CommentAction += (topic) => SetComment(topic);
         TimeManager.Instance.State.OnStateChange += () => _currentCount = _topicCount;
     }
+    private void OnDisable()
+    {
+        TimeManager.Instance.CommentAction -= (topic) => SetComment(topic);
+        TimeManager.Instance.State.OnStateChange -= () => _currentCount = _topicCount;
+    }
 
     [ContextMenu("SetText")]
     public void SetComment(string topic)
     {
-        Comment com = Instantiate(_commentData,_uiParent);
+        Comment com = Instantiate(_commentData, _uiParent);
 
 
         CommentAndResponseData data;
