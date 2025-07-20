@@ -11,8 +11,6 @@ public class TimeManager : MonoBehaviour
 
     [SerializeField] private int _viewerCount = 5;
 
-    public static TimeManager Instance;
-
     public System.Action<string> CommentAction;
 
     Action<float> OnTimer;
@@ -22,23 +20,7 @@ public class TimeManager : MonoBehaviour
     public bool IsStream => StreamTime >= 0;
     public TopicData State { get; private set; }
 
-    private void Awake()
-    {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
-    public void Initialize()
-    {
-        _topicIndex = 0;
-        OnTimer = null;
-    }
-
-    public void StartTimer()
+    private void Start()
     {
         CancellationTokenSource cts = new CancellationTokenSource();
         for (int i = 0; i < _viewerCount; i++)
