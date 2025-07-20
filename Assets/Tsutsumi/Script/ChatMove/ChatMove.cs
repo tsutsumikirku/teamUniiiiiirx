@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using DG.Tweening;
 using System.Collections.Generic;
 using System.Threading;
+using System.Linq;
 
 public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -13,6 +14,7 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     [SerializeField] private float _xMaxDistance = -1000f;
     [SerializeField] private float _yMinDistance = -1000f;
     [SerializeField] private float _yMaxDistance = 0;
+    private bool _isEnd = false;
     private bool _isMoving;
     private bool _isDragging;
     private RectTransform _rectTransform;
@@ -25,6 +27,7 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         _initialScale = transform.localScale;
         _rectTransform = GetComponent<RectTransform>();
         _rectTransform.anchoredPosition = new Vector2(_rectTransform.anchoredPosition.x, Random.Range(_yMinDistance, _yMaxDistance));
+        var frameObj = GameObject.FindWithTag("Frame");
         _isMoving = true;
         UniTaskMove().Forget();
     }
@@ -33,6 +36,7 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         CancellationToken cancellationToken = this.GetCancellationTokenOnDestroy();
         while (_isMoving)
         {
+            if (_isEnd) return;
             while (_isDragging)
             {
                 _rectTransform.anchoredPosition = (Vector2)Input.mousePosition - _dragPosition;
@@ -49,6 +53,7 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     }
     async UniTask End()
     {
+        _isEnd = true;
         transform.DOScale(0f,0.2f).OnComplete(() => Destroy(gameObject));
     }
     public void OnPointerDown(PointerEventData eventData)
@@ -74,10 +79,12 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (_isEnd) return;
         _rectTransform.DOScale(_rectTransform.localScale * _scale, 0.2f);
     }
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (_isEnd) return;
         _rectTransform.DOScale(_initialScale, 0.2f);
     }
 }

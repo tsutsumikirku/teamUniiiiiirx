@@ -12,6 +12,7 @@ public class Comment : MonoBehaviour
         Data = data.Data;
         if (!TryGetComponent<TextMeshProUGUI>(out var tmp)) return;
         tmp.text = Data.Comment;
+        
         if (!TryGetComponent<ChatMove>(out var chatMove)) return;
         chatMove.data = Data;
     }

@@ -153,12 +153,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _topicDaters:
   - _time: 60
-    _topic: 'EarlyStage '
+    _topic: EarlyStage
   _streamTimeLimit: 60
   _maxTime: 5
   _minTime: 1
   _viewerLiked: 0
   _viewerCount: 5
+  _frameManage: {fileID: 2056575365}
 --- !u!4 &7491497
 Transform:
   m_ObjectHideFlags: 0
@@ -348,6 +349,7 @@ GameObject:
   - component: {fileID: 696478145}
   - component: {fileID: 696478146}
   - component: {fileID: 696478144}
+  - component: {fileID: 696478147}
   m_Layer: 5
   m_Name: VtuberCharacter
   m_TagString: Player
@@ -421,6 +423,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 394b6b0a0d5fd0449ab44cb6331ef249, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &696478147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696478142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b4acb6447d74ef4ea85feb179d62f2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _initialMental: 100
+  _maxMental: 100
 --- !u!1 &770451777
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,6 +685,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1469800241329246061, guid: 9f042de4a5794454ea381f24ce0d87f0, type: 3}
   m_PrefabInstance: {fileID: 2955084219909070543}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2056575365 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4087051095046376775, guid: 9f042de4a5794454ea381f24ce0d87f0, type: 3}
+  m_PrefabInstance: {fileID: 2955084219909070543}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f0e54442b510364083a676dc03605a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2121329351
 GameObject:
   m_ObjectHideFlags: 0
