@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,14 @@ using UnityEngine;
 public class MoneyData
 {
     public int CurrentMoney { get; private set; }
+    Action<string, string> CoinViewUpdate;
+
+    public void Initialize()
+    {
+        int beforeMoney = CurrentMoney;
+        CurrentMoney = 0;
+        CoinViewUpdate = null;
+    }
 
     /// <summary>
     /// 所持金を変更する
@@ -14,6 +23,7 @@ public class MoneyData
     public void ChangeMoney(int money)
     {
         CurrentMoney = Mathf.Max(CurrentMoney + money, 0);
+        CoinViewUpdate?.Invoke(money.ToString(), CurrentMoney.ToString());
     }
 
     public bool IsUseMoney(int money)
