@@ -1,6 +1,8 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TimeManager : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private float _maxTime = 5, _minTime = 1;
     [SerializeField] private int _viewerLiked = 0;
     [SerializeField] private int _viewerCount = 5;
+    [SerializeField] private FrameManage _frameManage;
 
     public static TimeManager Instance;
 
@@ -26,7 +29,7 @@ public class TimeManager : MonoBehaviour
             Destroy(gameObject);
         }
         Instance = this;
-        State = new State(_viewerLiked);
+        State = new State(_viewerLiked, _frameManage.LikePointUpdate);
         DontDestroyOnLoad(gameObject);
     }
 
@@ -54,15 +57,16 @@ public class TimeManager : MonoBehaviour
         while (StreamTime > 0)
         {
             StreamTime -= Time.deltaTime;
+            _frameManage.TimeSliderUpdate(_streamTimeLimit / StreamTime);
             if (_topicIndex < _topicDaters.Length)
             {
                 if (StreamTime <= _topicDaters[_topicIndex].Time)
                 {
                     State.ChangeState(_topicDaters[_topicIndex].Topic);
+                    _frameManage.LikePointUpdate(State.ViewerLikedPoint.ToString());
                     _topicIndex++;
                 }
             }
-
             await UniTask.Yield(cancellationToken: token);
         }
 
@@ -89,12 +93,13 @@ public class State
 
     public string Topic { get; private set; } = "";
 
+    private event Action<string> _action;
+    public Action OnStateChange { get; set; }
 
-    public System.Action OnStateChange { get; set; }
-
-    public State(int viewerLikedPoint)
+    public State(int viewerLikedPoint, Action<string> action)
     {
         ViewerLikedPoint = viewerLikedPoint;
+        _action = action;
     }
 
     public void ChangeState(string topic)
@@ -105,7 +110,8 @@ public class State
 
     public void ChangeViewerLikedPoint(int viewerLikedPoint)
     {
-        ViewerLikedPoint = viewerLikedPoint;
+        ViewerLikedPoint += viewerLikedPoint;
+        _action?.Invoke(ViewerLikedPoint.ToString());
     }
 }
 
