@@ -20,7 +20,7 @@ public class DataManager : MonoBehaviour
 
     [SerializeField] private int _initialMental = 100;
     [SerializeField] private int _maxMental = 100;
-    [SerializeField] private int _initialLikedPoint = 0;
+    [SerializeField] private int _maxLikedPoint = 100;
 
     private void Awake()
     {
@@ -41,7 +41,7 @@ public class DataManager : MonoBehaviour
 
         TopicData = new CurrentTopicData();
 
-        ViewerLikedPointData = new ViewerLikedPointData(_initialLikedPoint);
+        ViewerLikedPointData = new ViewerLikedPointData(_maxLikedPoint);
     }
     /// <summary>
     /// すべてを一括で初期化
@@ -56,7 +56,7 @@ public class DataManager : MonoBehaviour
 
         TopicData.Initialize();
 
-        ViewerLikedPointData?.Initialize(_initialLikedPoint);
+        ViewerLikedPointData?.Initialize();
     }
 }
 [System.Serializable]
@@ -81,23 +81,31 @@ public class CurrentTopicData
 public class ViewerLikedPointData
 {
     public int CurrentLikedPoint { get; private set; }
+    public int MaxLikedPoint { get; private set; }
 
     public event Action<string, string> LikeabilityUpdate;
+    public event Action OnAddPoint;
 
     public ViewerLikedPointData(int viewerLikedPoint)
     {
-        CurrentLikedPoint = viewerLikedPoint;
+        MaxLikedPoint = viewerLikedPoint;
     }
 
     public void ChangeViewerLikedPoint(int viewerLikedPoint)
     {
-        CurrentLikedPoint += viewerLikedPoint;
+        if (CurrentLikedPoint > 0)
+        {
+            OnAddPoint?.Invoke();
+        }
+
+        CurrentLikedPoint = Mathf.Max(CurrentLikedPoint + viewerLikedPoint, MaxLikedPoint);
         LikeabilityUpdate?.Invoke(viewerLikedPoint.ToString(), CurrentLikedPoint.ToString());
     }
 
-    public void Initialize(int viewerLikedPoint)
+    public void Initialize()
     {
-        CurrentLikedPoint = viewerLikedPoint;
+        CurrentLikedPoint = 0;
         LikeabilityUpdate = null;
+        OnAddPoint = null;
     }
 }
