@@ -12,7 +12,7 @@ public struct SerifData
 }
 public class PrepairFaseDataManager : MonoBehaviour
 {
-    private string faseDataCsvPath = "FaseData.csv"; // デフォルトのCSVファイル名
+    [SerializeField]private string faseDataCsvPath = "FaseData.csv"; // デフォルトのCSVファイル名
     public string PrepairFaseDataPath
     {
         get => faseDataCsvPath;
