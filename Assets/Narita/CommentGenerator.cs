@@ -63,30 +63,44 @@ public class CommentGenerator : MonoBehaviour
     public void SetSuperChat()
     {
         string topic = DataManager.Instance.TopicData.Topic;
+        int currentLikedPoint = DataManager.Instance.ViewerLikedPointData.CurrentLikedPoint;
+        int maxLikedPoint = DataManager.Instance.ViewerLikedPointData.MaxLikedPoint;
 
-        int value = DataManager.Instance.ViewerLikedPointData.CurrentLikedPoint / 2;
-
-        int rand = Random.Range(0, DataManager.Instance.ViewerLikedPointData.MaxLikedPoint + 1);
-
-        if (rand > value)
-        {
-            SetComment(topic);
-            return;
-        }
+        // (Current/2) / Max の確率でGetSuperChatDataを呼ぶ
+        float superChatProbability = (currentLikedPoint / 2f) / maxLikedPoint;
+        float rand = Random.Range(0f, 1f);
 
         Comment com = Instantiate(_commentData, _uiParent);
-
         CommentAndResponseData data;
-        if (!string.IsNullOrEmpty(topic) && _currentCount != 0)
+
+        if (rand < superChatProbability)
         {
-            data = new CommentAndResponseData();
-            _commentDataManager.GetSuperChatData(topic, ref data);
-            _currentCount--;
-            Debug.LogError(data.Comment + data.Money);
+            // SuperChatデータを取得
+            if (!string.IsNullOrEmpty(topic) && _currentCount != 0)
+            {
+                data = new CommentAndResponseData();
+                _commentDataManager.GetSuperChatData(topic, ref data);
+                _currentCount--;
+                Debug.LogError(data.Comment + data.Money);
+            }
+            else
+            {
+                data = _commentDataManager.GetSuperChatData();
+            }
         }
         else
         {
-            data = _commentDataManager.GetSuperChatData();
+            // 通常のコメントデータを取得
+            if (!string.IsNullOrEmpty(topic) && _currentCount != 0)
+            {
+                data = new CommentAndResponseData();
+                _commentDataManager.GetCommentData(topic, ref data);
+                _currentCount--;
+            }
+            else
+            {
+                data = _commentDataManager.GetCommentData();
+            }
         }
 
         com.SetData(new CommentData(data));
