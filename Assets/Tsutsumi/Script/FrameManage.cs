@@ -43,6 +43,7 @@ public class FrameManage : MonoBehaviour
         DataManager.Instance.MentalData.MindHP += HPSliderUpdate;
         DataManager.Instance.ViewerLikedPointData.LikeabilityUpdate += LikePointUpdate;
         DataManager.Instance.MoneyData.CoinViewUpdate += MoneyUpdate;
+        FindObjectOfType<TimeManager>().OnTimer += TimeSliderUpdate;
         DayTextUpdate(DataManager.Instance.DayData.CurrentDay.ToString());
     }
     public void HPSliderUpdate(float value)
@@ -54,6 +55,7 @@ public class FrameManage : MonoBehaviour
     }
     public void TimeSliderUpdate(float value)
     {
+        value = Mathf.Abs(value - 1f);
         _timeTween?.Kill();
         if (!_timeSlider) return;
         _timeTween = _timeSlider.DOValue(value, 0.25f);
