@@ -2,7 +2,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class TimeManager : MonoBehaviour
 {
@@ -53,11 +52,10 @@ public class TimeManager : MonoBehaviour
     {
         Debug.Log("配信開始");
         StreamTime = streamTime;
-
         while (StreamTime > 0)
         {
             StreamTime -= Time.deltaTime;
-            _frameManage.TimeSliderUpdate(_streamTimeLimit / StreamTime);
+            _frameManage.TimeSliderUpdate((streamTime - StreamTime) / streamTime);
             if (_topicIndex < _topicDaters.Length)
             {
                 if (StreamTime <= _topicDaters[_topicIndex].Time)
