@@ -9,6 +9,11 @@ public class DayCounter
         CurrentDay = dayCount;
     }
 
+    public void Initialize(int dayCount)
+    {
+        CurrentDay = dayCount;
+    }
+
     public void AdvanceOneDay()
     {
         CurrentDay--;
