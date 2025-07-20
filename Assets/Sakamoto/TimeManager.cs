@@ -7,6 +7,8 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private float _streamTimeLimit = 60f;
     [SerializeField] private float _maxTime = 5, _minTime = 1;
     [SerializeField] private int _viewerLiked = 0;
+    [SerializeField] private int _viewerCount = 0;
+    [SerializeField] private int _maxViewerCount = 50;
     public static TimeManager Instance;
     public System.Action CommentAction;
     public float StreamTime { get; private set; }
@@ -34,7 +36,10 @@ public class TimeManager : MonoBehaviour
     private void Start()
     {
         CancellationTokenSource cts = new CancellationTokenSource();
-        AsyncGenerate(cts.Token).Forget();
+        for (int i = _viewerCount; i < _viewerLiked; i++)
+        {
+            AsyncGenerate(cts.Token).Forget();
+        }
         AsyncTimer(_streamTimeLimit, cts.Token).Forget();
     }
 
@@ -68,7 +73,7 @@ public class State
     public int ViewerLikedPoint { get; private set; }
     public string Topic { get; private set; }
 
-    public State( int viewerLikedPoint)
+    public State(int viewerLikedPoint)
     {
         ViewerLikedPoint = viewerLikedPoint;
     }
