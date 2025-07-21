@@ -14,12 +14,15 @@ public class CommentGenerator : MonoBehaviour
 
     private CommentDataManager _commentDataManager;
 
-    [SerializeField, Header("タイムマネージャー")] private TimeManager _timeManger;
+    private TimeManager _timeManger;
 
     [SerializeField, Header("アンチコメントの生成確率  1 / value")] private float _value = 5;
     private void Awake()
     {
         _commentDataManager = new CommentDataManager();
+
+        _timeManger = ServiceLocater.Get<TimeManager>();
+
         _timeManger.CommentAction += SetComment;
         DataManager.Instance.TopicData.OnStateChange += Initialize;
         DataManager.Instance.ViewerLikedPointData.OnAddPoint += SetSuperChat;
