@@ -157,7 +157,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 638.3666, y: 174.5073}
+  m_SizeDelta: {x: 562.7341, y: 147.716}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9201263
 MonoBehaviour:
@@ -381,7 +381,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 88.1522, y: 84.6474}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &390282184
 GameObject:
@@ -472,8 +472,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000038147, y: 17}
-  m_SizeDelta: {x: 593.3358, y: 749.17}
+  m_AnchoredPosition: {x: 0.0000038147, y: 191}
+  m_SizeDelta: {x: 494.4318, y: 574.6334}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &465507361
 MonoBehaviour:
@@ -706,7 +706,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 88.1522, y: 84.6474}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &717969967
 GameObject:
@@ -743,7 +743,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 324.0088, y: 85.8973}
+  m_SizeDelta: {x: 285.6208, y: 72.7099}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &717969969
 MonoBehaviour:
@@ -877,7 +877,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 324.0088, y: 85.8973}
+  m_SizeDelta: {x: 285.6208, y: 72.7099}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &838788662
 MonoBehaviour:
@@ -1079,7 +1079,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000061035, y: 0}
+  m_AnchoredPosition: {x: 0.000030518, y: -0.0024872}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1563860508
@@ -1253,7 +1253,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 320.33, y: 127.9016}
+  m_SizeDelta: {x: 282.3779, y: 108.2654}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1739246901
 MonoBehaviour:
@@ -1274,18 +1274,6 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: ResultButtonManager, Assembly-CSharp
         m_MethodName: ResultButton
         m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: OutGame
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1739246904}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: LoadScene
-        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1364,6 +1352,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bcc22fe8bdcbb8488ff24bbdaf7a027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  retireEndSceneName: RetireEnd
+  richEndSceneName: RichEnd
+  richEndMoneyCondition: 500000
+  normalEndSceneName: NormalEnd
+  homelessEndSceneName: HomelessEnd
 --- !u!1 &1756753967
 GameObject:
   m_ObjectHideFlags: 0
@@ -1501,7 +1494,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 619.2195, y: 140.8448}
+  m_SizeDelta: {x: 545.8555, y: 119.2215}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1800745338
 MonoBehaviour:

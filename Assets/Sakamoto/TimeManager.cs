@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +9,10 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private TopicData[] _topicDaters;
     [SerializeField] private float _streamTimeLimit = 60f;
     [SerializeField] private float _maxTime = 5, _minTime = 1;
+
+    [SerializeField]
+    [Header("最大到達好感度の数をこの数で割る\n割った数がコメントしてくれる人数になる")]
+    private float _divisor = 10f;
 
     [SerializeField] private int _viewerCount = 5;
 
@@ -26,7 +29,11 @@ public class TimeManager : MonoBehaviour
     private void Start()
     {
         _cts = new CancellationTokenSource();
-        for (int i = 0; i < _viewerCount; i++)
+
+        float total = DataManager.Instance.ViewerLikedPointData.TotalPoint;
+        int viewerCount = _viewerCount + (int)(total / _divisor);
+
+        for (int i = 0; i < viewerCount; i++)
         {
             AsyncGenerate(_cts.Token).Forget();
         }

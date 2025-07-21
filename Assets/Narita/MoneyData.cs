@@ -21,9 +21,12 @@ public class MoneyData
         CurrentMoney = 0;
         CoinViewUpdate = null;
     }
-
+    /// <summary>
+    /// Initializeと同じ処理だけどワンチャン変わる可能性があるのでわけています
+    /// </summary>
     public void Next()
     {
+        CurrentMoney = 0;
         CoinViewUpdate = null;
     }
 
