@@ -227,6 +227,10 @@ MonoBehaviour:
   _xMaxDistance: -1000
   _yMinDistance: -73
   _yMaxDistance: 381
+  _collision: 50
+  _onClickSoundTag: "\u30B3\u30E1\u30F3\u30C8\u30C9\u30E9\u30C3\u30B0SE"
+  _onReleaseSoundTag: "\u30B3\u30E1\u30F3\u30C8\u30C9\u30E9\u30C3\u30B0SE"
+  _onCharacterCatchTag: "\u30CD\u30EB\u30A2\u30BF\u30C3\u30C1SE"
 --- !u!1 &4821519240101112221
 GameObject:
   m_ObjectHideFlags: 0
