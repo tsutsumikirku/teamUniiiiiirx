@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using TMPro;
 using UnityEngine;
 
@@ -16,12 +16,17 @@ public class OutGameView : MonoBehaviour
     void Awake()
     {
         _outGameManager = GetComponent<OutGameManager>();
+
         _healButton.onClick.AddListener(_outGameManager.Rest);
         _healText.text = $"一日主に寝る、精神+{_outGameManager.RestPoint}";
+
         _liveButton.onClick.AddListener(_outGameManager.GoStream);
         _liveText.text = $"配信に行く、精神{_outGameManager.StreamPoint}";
-        _snackText.text = DataManager.Instance.MoneyData.CurrentMoney > _outGameManager.EatingMoney ? $"{_outGameManager.EatingMoney}払って精神+{_outGameManager.EatingPoint}": "お金が足りません";
-        if(DataManager.Instance.MoneyData.CurrentMoney > _outGameManager.EatingMoney)_snackButton.onClick.AddListener(_outGameManager.Eat);
+
+        _snackButton.onClick.AddListener(_outGameManager.Eat);
+        _snackText.text = DataManager.Instance.MoneyData.CurrentMoney > _outGameManager.EatingMoney ? $"{_outGameManager.EatingMoney}払って精神+{_outGameManager.EatingPoint}" : "お金が足りません";
+
+        if (DataManager.Instance.MoneyData.CurrentMoney > _outGameManager.EatingMoney)_snackButton.onClick.AddListener(_outGameManager.Eat);
         if (_serifCsvDataSets.Length == 0) return;
         // SerifCsvDataSet todaySerif = Array.Find(_serifCsvDataSets, x => x.Day == DataManager.Instance.DayData.CurrentDay);
         // _outGameManager._data.PrepairFaseDataPath = todaySerif.CsvPath;
