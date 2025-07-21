@@ -24,7 +24,7 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     private Vector2 _characterPosition;
     public CommentAndResponseData _data;
 
-    async UniTask Awake()
+    private void Awake()
     {
         _initialScale = transform.localScale;
         _rectTransform = GetComponent<RectTransform>();
@@ -35,7 +35,7 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         _characterPosition = GameObject.FindWithTag("Player").GetComponent<RectTransform>().anchoredPosition;
         UniTaskMove().Forget();
     }
-    async UniTask UniTaskMove()
+    private async UniTask UniTaskMove()
     {
         CancellationToken cancellationToken = this.GetCancellationTokenOnDestroy();
         while (_isMoving)
