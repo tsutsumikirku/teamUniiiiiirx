@@ -74,7 +74,7 @@ public class FrameManage : MonoBehaviour
         _likePointText.text = "好感度:" + value2;
         if (!_likePointInText) return;
         _likePointInText.gameObject.SetActive(false);
-        _likePointInText.text = "+" + value1;
+        _likePointInText.text = int.Parse(value1) > 0 ? "+" + value1 : value1;
         _likePointInText.gameObject.SetActive(true);
     }
     private void MoneyUpdate(string value1, string value2)
@@ -83,7 +83,7 @@ public class FrameManage : MonoBehaviour
         _moneyText.text = "お金:" + value2;
         if (!_moneyInText) return;
         _moneyInText.gameObject.SetActive(false);
-        _moneyInText.text = "+" + value1;
+        _moneyInText.text = int.Parse(value1) > 0 ? "+" + value1 : value1;
         _moneyInText.gameObject.SetActive(true);
     }
     public void LayerUpdate()
