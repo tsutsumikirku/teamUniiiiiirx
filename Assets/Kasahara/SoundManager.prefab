@@ -304,7 +304,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmSource: {fileID: 35581274771147824}
   seSource: {fileID: 8921771069660959941}
-  bgmClips:
-  - {fileID: 0}
+  bgmClips: []
   seClips:
-  - {fileID: 0}
+  - {fileID: 8300000, guid: d7bc121f4434f8440aaa7c96ec73c123, type: 3}
+  - {fileID: 8300000, guid: 322c22b5b263cb84f9dd7094c4fb8ba0, type: 3}
+  - {fileID: 8300000, guid: f3257b218db820540bf6fb7a7f44ef6c, type: 3}
