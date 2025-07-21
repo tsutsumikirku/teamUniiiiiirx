@@ -27,10 +27,11 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     private Vector2 _dragPosition;
     private Vector2 _characterPosition;
     private CommentAndResponseData _data;
-    public CommentAndResponseData Data 
-    { 
-        get => _data; 
-        set => UniTaskMove(value).Forget(); 
+    private GameObject _player;
+    public CommentAndResponseData Data
+    {
+        get => _data;
+        set => UniTaskMove(value).Forget();
     }
 
     private void Awake()
@@ -41,7 +42,8 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         var frameObj = GameObject.FindWithTag("Frame");
         FindObjectOfType<FrameManage>().LayerUpdate();
         _isMoving = true;
-        _characterPosition = GameObject.FindWithTag("Player").GetComponent<RectTransform>().anchoredPosition;
+        _player = GameObject.FindWithTag("Player");
+        _characterPosition = _player.GetComponent<RectTransform>().anchoredPosition;
     }
     public async UniTask UniTaskMove(CommentAndResponseData data)
     {
@@ -49,12 +51,39 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         CancellationToken cancellationToken = this.GetCancellationTokenOnDestroy();
         while (_isMoving)
         {
-            if (_data.Money != 0 && _data.MentalDamage < 0)
+            if (_data.Money == 0 && _data.MentalDamage > 0)
             {
-
+                if (ServiceLocater.Get<TimeManager>().StreamTime <= 0)
+                {
+                    Destroy(gameObject);
+                } 
+                if (_isEnd) return;
+                while (_isDragging)
+                {
+                    _rectTransform.anchoredPosition = (Vector2)Input.mousePosition - _dragPosition;
+                    await UniTask.Yield(cancellationToken);
+                }
+                _rectTransform.anchoredPosition += (_rectTransform.anchoredPosition - _characterPosition).normalized *( _speed / 2) * Time.deltaTime;
+                if (Vector2.Distance(_rectTransform.anchoredPosition, _characterPosition) < _collision)
+                {
+                    if (!_player.TryGetComponent<Reply>(out var reply)) return;
+                    reply.SaveState(_data);
+                    if (!_player.TryGetComponent<CharacterTextManager>(out var characterText)) return;
+                    characterText.TextUpdate(_data.Response, _data.MotionType);
+                    End();
+                }
+                if (_xMaxDistance > _rectTransform.anchoredPosition.x + _rectTransform.rect.width / 2)
+                {
+                    _isMoving = false;
+                }
+                await UniTask.Delay(1, cancellationToken: cancellationToken);
             }
             else
             {
+                if (ServiceLocater.Get<TimeManager>().StreamTime <= 0)
+                {
+                    Destroy(gameObject);
+                } 
                 if (_isEnd) return;
                 while (_isDragging)
                 {
@@ -101,10 +130,20 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 if (!result.gameObject.TryGetComponent<Reply>(out var reply)) return;
                 reply.SaveState(_data);
                 if (!result.gameObject.TryGetComponent<CharacterTextManager>(out var characterText)) return;
-                characterText.TextUpdate(_data.Response);
+                characterText.TextUpdate(_data.Response, _data.MotionType);
                 End();
                 SoundManager.Instance.PlaySE(_onCharacterCatchTag);
                 return;
+            }
+            else if (result.gameObject.tag == "Trash")
+            {
+                if (!TryGetComponent<Comment>(out var comment))
+                {
+                    End();
+                    return;
+                }
+                comment.OnThrowEvent();
+                End();
             }
             SoundManager.Instance.PlaySE(_onReleaseSoundTag);
         }

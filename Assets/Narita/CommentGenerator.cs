@@ -17,6 +17,8 @@ public class CommentGenerator : MonoBehaviour
     private TimeManager _timeManger;
 
     [SerializeField, Header("アンチコメントの生成確率  1 / value")] private float _value = 5;
+    [SerializeField, Header("アンチコメントの最大生成確率"), Range(0, 1)] private float _maxValue = 0.5f;
+
     private void Awake()
     {
         _commentDataManager = new CommentDataManager();
@@ -51,12 +53,21 @@ public class CommentGenerator : MonoBehaviour
     {
         Comment com = Instantiate(_commentData, _uiParent);
 
-        float value = 1 / _value;
+        float baseProbability = 1f / _value; // 基本のアンチ出現確率
+        float hateBoost = 0f;
+
+        int minusPoint = Mathf.Abs(DataManager.Instance.ViewerLikedPointData.TotalMinusPoint);
+        int maxPoint = DataManager.Instance.ViewerLikedPointData.MaxLikedPoint;
+
+        // 減点量に応じた補正を計算（最大で +0.5 までブースト）
+        hateBoost = Mathf.Clamp01((float)minusPoint / maxPoint * 0.5f);
+
+        float totalProbability = Mathf.Min(Mathf.Clamp01(baseProbability + hateBoost), _maxValue);
         float rand = Random.Range(0f, 1f);
 
         CommentAndResponseData data;
 
-        if (value < rand)
+        if (rand > totalProbability)
         {
             if (!string.IsNullOrEmpty(topic) && _currentCount != 0)
             {
@@ -64,7 +75,6 @@ public class CommentGenerator : MonoBehaviour
                 _commentDataManager.GetCommentData(topic, ref data);
                 _currentCount--;
             }
-            //話題がなかったら、または、話題生成の上限に達していたら
             else
             {
                 data = _commentDataManager.GetCommentData();
@@ -78,14 +88,15 @@ public class CommentGenerator : MonoBehaviour
                 _commentDataManager.GetHateCommentData(topic, ref data);
                 _currentCount--;
             }
-            //話題がなかったら、または、話題生成の上限に達していたら
             else
             {
                 data = _commentDataManager.GetHateCommentData();
             }
         }
+
         com.SetData(new CommentData(data));
     }
+
     public void SetSuperChat()
     {
         string topic = DataManager.Instance.TopicData.Topic;
