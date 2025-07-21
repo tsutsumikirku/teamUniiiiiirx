@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -34,7 +33,7 @@ public class TimeManager : MonoBehaviour
         float total = DataManager.Instance.ViewerLikedPointData.TotalPoint;
         int viewerCount = _viewerCount + (int)(total / _divisor);
 
-        for (int i = 0; i < _viewerCount; i++)
+        for (int i = 0; i < viewerCount; i++)
         {
             AsyncGenerate(_cts.Token).Forget();
         }
