@@ -49,6 +49,7 @@ public class FrameManage : MonoBehaviour
     }
     private void HPSliderUpdate(float value)
     {
+        if(!_hpSlider) return;
         Debug.Log("HPスライダー更新: " + value);
         _hpTween?.Kill();
         if (!_hpSlider) return;
@@ -56,6 +57,7 @@ public class FrameManage : MonoBehaviour
     }
     private void TimeSliderUpdate(float value1, float value2)
     {
+        if (!_timeSlider) return;
         value1 = Mathf.Abs(value1 - 1f);
         _timeTween?.Kill();
         if (!_timeSlider) return;
