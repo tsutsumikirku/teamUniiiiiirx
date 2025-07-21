@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class TextWriter : MonoBehaviour
 {
+    [Header("チェックついてたら自動でタイトルに戻らない")]
+    [SerializeField] private bool _cannotSceneChange = false;
     [SerializeField] private TutorialText _uitext;
     [SerializeField] private Image _backgroundImage;
     [SerializeField] private List<SceneData> _sceneList=new ();
@@ -37,9 +39,12 @@ public class TextWriter : MonoBehaviour
             yield return StartCoroutine(Skip());
         }
 
+        if (_cannotSceneChange==false)
+        {
         // 最後のセリフが終わったらシーン遷移
         if (!string.IsNullOrEmpty(_nextSceneName))
-            SceneManager.LoadScene(_nextSceneName);
+                SceneManager.LoadScene(_nextSceneName);
+        }
     }
     public void ChangeScene(string sceneName)
     {
