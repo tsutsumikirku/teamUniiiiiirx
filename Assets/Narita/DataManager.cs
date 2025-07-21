@@ -100,8 +100,9 @@ public class ViewerLikedPointData
             OnAddPoint?.Invoke();
         }
 
-        CurrentLikedPoint = Mathf.Max(CurrentLikedPoint + viewerLikedPoint, MaxLikedPoint);
+        CurrentLikedPoint = Mathf.Min(CurrentLikedPoint + viewerLikedPoint, MaxLikedPoint);
         LikeabilityUpdate?.Invoke(viewerLikedPoint.ToString(), CurrentLikedPoint.ToString());
+        Debug.Log($"増減{viewerLikedPoint}----値{CurrentLikedPoint}");
     }
 
     public void Initialize()
