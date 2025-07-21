@@ -20,10 +20,6 @@ public class ChatDetail : MonoBehaviour
                 _superChatDetail.gameObject.SetActive(true);
                 _superChatDetail.SetText(message);
                 break;
-            case CommentType.Anti:
-                _commentDetail.gameObject.SetActive(true);
-                _commentDetail.SetString(message);
-                break;
         }
     }
 }
