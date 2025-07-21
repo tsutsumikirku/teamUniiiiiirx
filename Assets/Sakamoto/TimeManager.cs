@@ -20,15 +20,16 @@ public class TimeManager : MonoBehaviour
     private int _topicIndex = 0;
     public float StreamTime { get; private set; }
     public bool IsStream => StreamTime >= 0;
+    private CancellationTokenSource _cts;
 
     private void Start()
     {
-        CancellationTokenSource cts = new CancellationTokenSource();
+        _cts = new CancellationTokenSource();
         for (int i = 0; i < _viewerCount; i++)
         {
-            AsyncGenerate(cts.Token).Forget();
+            AsyncGenerate(_cts.Token).Forget();
         }
-        AsyncTimer(_streamTimeLimit, cts.Token).Forget();
+        AsyncTimer(_streamTimeLimit, _cts.Token).Forget();
     }
 
     public async UniTask AsyncTimer(float streamTime, CancellationToken token)
@@ -51,6 +52,9 @@ public class TimeManager : MonoBehaviour
             OnTimer?.Invoke(StreamTime / streamTime, StreamTime);
         }
         Debug.Log("ストリーム終了");
+
+        _cts.Cancel();
+
         SceneManager.LoadSceneAsync("ResultScene", LoadSceneMode.Additive);
     }
 
