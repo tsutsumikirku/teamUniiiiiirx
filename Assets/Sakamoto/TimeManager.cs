@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TimeManager : MonoBehaviour
 {
@@ -48,8 +50,8 @@ public class TimeManager : MonoBehaviour
             await UniTask.Yield(cancellationToken: token);
             OnTimer?.Invoke(StreamTime / streamTime, StreamTime);
         }
-
         Debug.Log("ストリーム終了");
+        SceneManager.LoadSceneAsync("ResultScene", LoadSceneMode.Additive);
     }
 
     private async UniTask AsyncGenerate(CancellationToken token)

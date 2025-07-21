@@ -3,6 +3,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class FrameManage : MonoBehaviour
 {
@@ -60,6 +61,7 @@ public class FrameManage : MonoBehaviour
         if (!_timeSlider) return;
         _timeTween = _timeSlider.DOValue(value1, 0.25f);
         _timeText.text = Mathf.Abs(value2 - 60).ToString("00:00");
+
     }
     private void DayTextUpdate(string value1)
     {

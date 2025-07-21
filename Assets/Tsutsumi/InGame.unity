@@ -739,7 +739,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 106be1c7e718115488d3e63a1c3020c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _commentData: {fileID: 1067857822091809790, guid: b013000c07c3277498b556fb7b38c823, type: 3}
+  _commentData: {fileID: 8582151953583842022, guid: e57c0249037d3b947b056150118f0617, type: 3}
   _uiParent: {fileID: 770451781}
   _topicCount: 5
   _timeManger: {fileID: 7491496}
@@ -1550,6 +1550,10 @@ PrefabInstance:
       propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4087051095046376775, guid: 9f042de4a5794454ea381f24ce0d87f0, type: 3}
+      propertyPath: _timeText
+      value: 
+      objectReference: {fileID: 1745956370}
     - target: {fileID: 4087051095046376775, guid: 9f042de4a5794454ea381f24ce0d87f0, type: 3}
       propertyPath: _moneyInText
       value: 
