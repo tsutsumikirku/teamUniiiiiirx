@@ -57,7 +57,7 @@ public class TimeManager : MonoBehaviour
 
         _cts.Cancel();
         OnEndTimer?.Invoke();
-
+        CharacterTextManager.CharacterTextManagerInstance.TextUpdate("おわった～～。\n一服するかぁ");
         SceneManager.LoadSceneAsync("ResultScene", LoadSceneMode.Additive);
     }
 
