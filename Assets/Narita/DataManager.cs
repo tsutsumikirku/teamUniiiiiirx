@@ -22,10 +22,12 @@ public class DataManager : MonoBehaviour
     [SerializeField] private int _maxMental = 100;
     [SerializeField] private int _maxLikedPoint = 100;
     [SerializeField] private int _minLikedPoint = -100;
+    [SerializeField] private int _maxDayLikedPoint = 30;
+    [SerializeField] private int _amountPaid = 100000;
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (Instance != null)
         {
             Destroy(gameObject);
             return;
@@ -36,7 +38,7 @@ public class DataManager : MonoBehaviour
 
         MentalData = new MentalData(_initialMental, _maxMental);
 
-        MoneyData = new MoneyData();
+        MoneyData = new MoneyData(_amountPaid);
 
         DayData = new DayCounter(_maxDayCount);
 
@@ -57,7 +59,20 @@ public class DataManager : MonoBehaviour
 
         TopicData.Initialize();
 
-        ViewerLikedPointData?.Initialize();
+        ViewerLikedPointData.Initialize();
+    }
+    /// <summary>
+    /// 次の配信に移る際のデータの初期化
+    /// </summary>
+    public void NextStream()
+    {
+        MentalData.Next();
+
+        MoneyData.Next();
+
+        TopicData.Initialize();
+
+        ViewerLikedPointData.Next();
     }
 }
 [System.Serializable]
@@ -106,6 +121,13 @@ public class ViewerLikedPointData
         CurrentLikedPoint = Mathf.Clamp(CurrentLikedPoint + viewerLikedPoint, MinLikedPoint, MaxLikedPoint);
         LikeabilityUpdate?.Invoke(viewerLikedPoint.ToString(), CurrentLikedPoint.ToString());
         Debug.Log($"増減{viewerLikedPoint}----値{CurrentLikedPoint}");
+    }
+
+    public void Next()
+    {
+        BeforeLikedPoint = CurrentLikedPoint;
+        LikeabilityUpdate = null;
+        OnAddPoint = null;
     }
 
     public void Initialize()

@@ -16,6 +16,7 @@ public class TimeManager : MonoBehaviour
     public System.Action<string> CommentAction;
 
     public event Action<float, float> OnTimer;
+    private event Action OnEndTimer;
 
     private int _topicIndex = 0;
     public float StreamTime { get; private set; }
@@ -30,6 +31,7 @@ public class TimeManager : MonoBehaviour
             AsyncGenerate(_cts.Token).Forget();
         }
         AsyncTimer(_streamTimeLimit, _cts.Token).Forget();
+        OnEndTimer += DataManager.Instance.MoneyData.AddTotalMoney;
     }
 
     public async UniTask AsyncTimer(float streamTime, CancellationToken token)
@@ -54,6 +56,7 @@ public class TimeManager : MonoBehaviour
         Debug.Log("ストリーム終了");
 
         _cts.Cancel();
+        OnEndTimer?.Invoke();
 
         SceneManager.LoadSceneAsync("ResultScene", LoadSceneMode.Additive);
     }
