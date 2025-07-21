@@ -3,8 +3,6 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using System;
 
 public class FrameManage : MonoBehaviour
 {
@@ -46,8 +44,8 @@ public class FrameManage : MonoBehaviour
         if(_timeSlider)FindObjectOfType<TimeManager>().OnTimer += TimeSliderUpdate;
         DayTextUpdate(DataManager.Instance.DayData.CurrentDay.ToString());
         HPSliderUpdate(DataManager.Instance.MentalData.CurrentMental / 100);
-        _likePointText.text = "好感度:" + 0;
-        _moneyText.text = "お金:" + 0;
+        _likePointText.text = "好感度:" + DataManager.Instance.ViewerLikedPointData.CurrentLikedPoint;    ;
+        _moneyText.text = "お金:" + DataManager.Instance.MoneyData.CurrentMoney;
     }
     private void HPSliderUpdate(float value)
     {
@@ -65,12 +63,11 @@ public class FrameManage : MonoBehaviour
         if (!_timeSlider) return;
         _timeTween = _timeSlider.DOValue(value1, 0.25f);
         _timeText.text = Mathf.Abs(value2 - 60).ToString("00:00");
-
     }
     private void DayTextUpdate(string value1)
     {
         if (!_dayText) return;
-        _dayText.text = Mathf.Abs(int.Parse(value1) - 6) + "日目";
+        _dayText.text = Mathf.Abs(int.Parse(value1) - 8) + "日目";
     }
     private void LikePointUpdate(string value1, string value2)
     {
