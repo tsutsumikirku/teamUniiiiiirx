@@ -63,7 +63,7 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                     _rectTransform.anchoredPosition = (Vector2)Input.mousePosition - _dragPosition;
                     await UniTask.Yield(cancellationToken);
                 }
-                _rectTransform.anchoredPosition += (_rectTransform.anchoredPosition - _characterPosition).normalized * _speed * Time.deltaTime;
+                _rectTransform.anchoredPosition += (_rectTransform.anchoredPosition - _characterPosition).normalized *( _speed / 2) * Time.deltaTime;
                 if (Vector2.Distance(_rectTransform.anchoredPosition, _characterPosition) < _collision)
                 {
                     if (!_player.TryGetComponent<Reply>(out var reply)) return;
