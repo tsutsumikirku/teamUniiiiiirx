@@ -125,15 +125,18 @@ public class ViewerLikedPointData
         {
             OnAddPoint?.Invoke();
         }
-        if (_maxDayPoint <= _currentDayPoint) { return; }
 
+        int beforeDayPoint = _currentDayPoint;
         _currentDayPoint = Mathf.Min(_currentDayPoint + viewerLikedPoint, _maxDayPoint);
+
+        // 実際に加算できた量を計算
+        int actualAdded = _currentDayPoint - beforeDayPoint;
 
         CurrentLikedPoint = Mathf.Clamp(BeforeLikedPoint + _currentDayPoint, MinLikedPoint, MaxLikedPoint);
 
         TotalPoint = Mathf.Max(TotalPoint, CurrentLikedPoint);
 
-        LikeabilityUpdate?.Invoke(viewerLikedPoint.ToString(), CurrentLikedPoint.ToString());
+        LikeabilityUpdate?.Invoke(actualAdded.ToString(), CurrentLikedPoint.ToString());
     }
 
     public void Next()
