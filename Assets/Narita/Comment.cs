@@ -13,19 +13,19 @@ public class Comment : MonoBehaviour
     {
         Data = data.Data;
 
-        if (data.Data.MentalDamage != 0)
+        if (Data.MentalDamage != 0)
         {
             CommentType = CommentType.Anti;
         }
 
-        else if (data.Data.Money != 0)
+        else if (Data.Money != 0)
         {
             CommentType = CommentType.Super;
+            DataManager.Instance.MoneyData.ChangeMoney(Data.Money);
         }
 
-        if (!TryGetComponent<TextMeshProUGUI>(out var tmp)) return;
-        tmp.text = Data.Comment;
-
+        if (!TryGetComponent<ChatDetail>(out var chat)) return;
+        chat.SetChatDetail(CommentType, Data.Comment);
         if (!TryGetComponent<ChatMove>(out var chatMove)) return;
         chatMove._data = Data;
     }

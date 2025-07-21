@@ -5,26 +5,24 @@ using UnityEngine;
 [RequireComponent(typeof(Texture))]
 public class ChatDetail : MonoBehaviour
 {
-    [SerializeField] Sprite _noneSprite;
-    [SerializeField] Sprite _superChatSprite;
-    [SerializeField] Sprite _antiSprite;
-    private Texture _texture;
-    private void Awake()
-    {
-        _texture = GetComponent<Texture>();
-    }
-    public void SetChatDetail(CommentType type)
+    [SerializeField] CommentDetail _commentDetail;
+    [SerializeField] SuperChatDetail _superChatDetail;
+    
+    public void SetChatDetail(CommentType type, string message)
     {
         switch (type)
         {
             case CommentType.None:
-                _texture = _noneSprite.texture;
+                _commentDetail.gameObject.SetActive(true);
+                _commentDetail.SetString(message);
                 break;
             case CommentType.Super:
-                _texture = _superChatSprite.texture;
+                _superChatDetail.gameObject.SetActive(true);
+                _superChatDetail.SetText(message);
                 break;
             case CommentType.Anti:
-                _texture = _antiSprite.texture;
+                _commentDetail.gameObject.SetActive(true);
+                _commentDetail.SetString(message);
                 break;
         }
     }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TimeManager : MonoBehaviour
 {
@@ -13,20 +15,23 @@ public class TimeManager : MonoBehaviour
 
     public System.Action<string> CommentAction;
 
-    public event Action<float> OnTimer;
+    public event Action<float, float> OnTimer;
+    private event Action OnEndTimer;
 
     private int _topicIndex = 0;
     public float StreamTime { get; private set; }
     public bool IsStream => StreamTime >= 0;
+    private CancellationTokenSource _cts;
 
     private void Start()
     {
-        CancellationTokenSource cts = new CancellationTokenSource();
+        _cts = new CancellationTokenSource();
         for (int i = 0; i < _viewerCount; i++)
         {
-            AsyncGenerate(cts.Token).Forget();
+            AsyncGenerate(_cts.Token).Forget();
         }
-        AsyncTimer(_streamTimeLimit, cts.Token).Forget();
+        AsyncTimer(_streamTimeLimit, _cts.Token).Forget();
+        OnEndTimer += DataManager.Instance.MoneyData.AddTotalMoney;
     }
 
     public async UniTask AsyncTimer(float streamTime, CancellationToken token)
@@ -46,15 +51,19 @@ public class TimeManager : MonoBehaviour
                 }
             }
             await UniTask.Yield(cancellationToken: token);
-            OnTimer?.Invoke(StreamTime / streamTime);
+            OnTimer?.Invoke(StreamTime / streamTime, StreamTime);
         }
-
         Debug.Log("ストリーム終了");
+
+        _cts.Cancel();
+        OnEndTimer?.Invoke();
+
+        SceneManager.LoadSceneAsync("ResultScene", LoadSceneMode.Additive);
     }
 
     private async UniTask AsyncGenerate(CancellationToken token)
     {
-        while (true)
+        while (IsStream)
         {
             float randTime = UnityEngine.Random.Range(_minTime, _maxTime);
             await UniTask.Delay((int)(randTime * 1000), cancellationToken: token);

@@ -13,7 +13,7 @@ public class Reply : MonoBehaviour
 
         DataManager.Instance.ViewerLikedPointData.ChangeViewerLikedPoint(Data.LikePoint);
 
-        DataManager.Instance.MentalData.ChangeMental(Data.MentalDamage);
+        DataManager.Instance.MentalData.ChangeMental(-Data.MentalDamage);
 
         DataManager.Instance.TopicData.ChangeState(Data.CommentType);
     }

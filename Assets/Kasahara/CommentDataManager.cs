@@ -17,8 +17,9 @@ public struct CommentAndResponseData
 }
 public class CommentDataManager
 {
-    readonly Dictionary<string, HashSet<CommentAndResponseData>> commentAndResponseData = new Dictionary<string, HashSet<CommentAndResponseData>>();
+    readonly Dictionary<string, HashSet<CommentAndResponseData>> CommentAndResponseData = new Dictionary<string, HashSet<CommentAndResponseData>>();
     readonly Dictionary<string, HashSet<CommentAndResponseData>> SuperChatResponseData = new Dictionary<string, HashSet<CommentAndResponseData>>();
+    readonly Dictionary<string, HashSet<CommentAndResponseData>> HateCommentResponseData = new Dictionary<string, HashSet<CommentAndResponseData>>();
     public CommentDataManager()
     {
         LoadCommentData();
@@ -43,7 +44,7 @@ public class CommentDataManager
                     MotionType = values[7],
                     Money = int.Parse(values[8])
                 };
-                if(data.Money > 0)
+                if (data.Money > 0)
                 {
                     if (SuperChatResponseData.TryGetValue(values[0], out var superChatDatas))
                     {
@@ -57,18 +58,32 @@ public class CommentDataManager
                         });
                     }
                 }
+                else if (data.MentalDamage > 0)
+                {
+                    if (HateCommentResponseData.TryGetValue(values[0], out var hateCommentDatas))
+                    {
+                        hateCommentDatas.Add(data);
+                    }
+                    else
+                    {
+                        HateCommentResponseData.Add(values[0], new HashSet<CommentAndResponseData>
+                        {
+                            data
+                        });
+                    }
+                }
                 else
                 {
-                    if (commentAndResponseData.TryGetValue(values[0], out var datas))
+                    if (CommentAndResponseData.TryGetValue(values[0], out var datas))
                     {
                         datas.Add(data);
                     }
                     else
                     {
-                        commentAndResponseData.Add(values[0], new HashSet<CommentAndResponseData>
-                    {
-                        data
-                    });
+                        CommentAndResponseData.Add(values[0], new HashSet<CommentAndResponseData>
+                        {
+                            data
+                        });
                     }
                 }
             }
@@ -87,7 +102,7 @@ public class CommentDataManager
     public bool GetCommentData(string type, ref CommentAndResponseData data)
     {
         //ランダムにコメントデータを取得する例を示します。
-        if (commentAndResponseData.TryGetValue(type, out var datas))
+        if (CommentAndResponseData.TryGetValue(type, out var datas))
         {
             if (datas.Count > 0)
             {
@@ -131,6 +146,34 @@ public class CommentDataManager
             Debug.LogWarning($"指定されたコメントタイプ '{type}' が見つかりません。");
             //return false;
             data = GetSuperChatData();
+            return true;
+        }
+    }
+    public CommentAndResponseData GetHateCommentData()
+    {
+        CommentAndResponseData data = new CommentAndResponseData();
+        GetHateCommentData("Common", ref data);
+        return data;
+    }
+    public bool GetHateCommentData(string type, ref CommentAndResponseData data)
+    {
+        //ランダムにアンチコメントデータを取得する例を示します。
+        if (HateCommentResponseData.TryGetValue(type, out var datas))
+        {
+            if (datas.Count > 0)
+            {
+                var randomData = datas.ElementAt(Random.Range(0, datas.Count));
+                data = randomData;
+                return true;
+            }
+            Debug.LogWarning($"指定されたコメントタイプ '{type}' のコメントデータがありません。");
+            return false;
+        }
+        else
+        {
+            Debug.LogWarning($"指定されたコメントタイプ '{type}' が見つかりません。");
+            //return false;
+            data = GetHateCommentData();
             return true;
         }
     }

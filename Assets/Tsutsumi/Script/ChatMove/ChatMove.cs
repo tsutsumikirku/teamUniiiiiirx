@@ -5,6 +5,7 @@ using DG.Tweening;
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
+using UnityEngine.Events;
 
 public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -14,24 +15,31 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     [SerializeField] private float _xMaxDistance = -1000f;
     [SerializeField] private float _yMinDistance = -1000f;
     [SerializeField] private float _yMaxDistance = 0;
+    [SerializeField] private float _collision = 50f;
+    [SerializeField, Header("クリックしたときのサウンドの名前")] private string _onClickSoundTag;
+    [SerializeField, Header("リリースしたときのサウンドの名前")] private string _onReleaseSoundTag;
+    [SerializeField, Header("ネルさんに食べさせた時のサウンドの名前")] private string _onCharacterCatchTag; 
     private bool _isEnd = false;
     private bool _isMoving;
     private bool _isDragging;
     private RectTransform _rectTransform;
     private Vector2 _initialScale;
     private Vector2 _dragPosition;
+    private Vector2 _characterPosition;
     public CommentAndResponseData _data;
 
-    void Awake()
+    private void Awake()
     {
         _initialScale = transform.localScale;
         _rectTransform = GetComponent<RectTransform>();
         _rectTransform.anchoredPosition = new Vector2(_rectTransform.anchoredPosition.x, Random.Range(_yMinDistance, _yMaxDistance));
         var frameObj = GameObject.FindWithTag("Frame");
+        FindObjectOfType<FrameManage>().LayerUpdate();
         _isMoving = true;
+        _characterPosition = GameObject.FindWithTag("Player").GetComponent<RectTransform>().anchoredPosition;
         UniTaskMove().Forget();
     }
-    async UniTask UniTaskMove()
+    private async UniTask UniTaskMove()
     {
         CancellationToken cancellationToken = this.GetCancellationTokenOnDestroy();
         while (_isMoving)
@@ -49,17 +57,25 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             }
             await UniTask.Delay(1, cancellationToken: cancellationToken);
         }
+        if (!TryGetComponent<Comment>(out var comment))
+        {
+            Destroy(gameObject);
+            return;
+        }
+        comment.OnThrowEvent();
         Destroy(gameObject);
     }
-    async UniTask End()
+    
+    void End()
     {
         _isEnd = true;
-        transform.DOScale(0f,0.2f).OnComplete(() => Destroy(gameObject));
+        transform.DOScale(0f, 0.2f).OnComplete(() => Destroy(gameObject));
     }
     public void OnPointerDown(PointerEventData eventData)
     {
         _isDragging = true;
         _dragPosition = (Vector2)Input.mousePosition - _rectTransform.anchoredPosition;
+        SoundManager.Instance.PlaySE(_onClickSoundTag);
     }
     public void OnPointerUp(PointerEventData eventData)
     {
@@ -74,8 +90,11 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 reply.SaveState(_data);
                 if (!result.gameObject.TryGetComponent<CharacterTextManager>(out var characterText)) return;
                 characterText.TextUpdate(_data.Response);
-                End().Forget();
+                End();
+                SoundManager.Instance.PlaySE(_onCharacterCatchTag);
+                return;
             }
+            SoundManager.Instance.PlaySE(_onReleaseSoundTag);
         }
     } 
 

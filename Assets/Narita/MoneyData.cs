@@ -8,11 +8,22 @@ public class MoneyData
 {
     public int CurrentMoney { get; private set; }
     public event Action<string, string> CoinViewUpdate;
+    public int TotalMoney { get; private set; }
+    public int AmountPaid { get; private set; }
+
+    public MoneyData(int amountPaid)
+    {
+        AmountPaid = amountPaid;
+    }
 
     public void Initialize()
     {
-        int beforeMoney = CurrentMoney;
         CurrentMoney = 0;
+        CoinViewUpdate = null;
+    }
+
+    public void Next()
+    {
         CoinViewUpdate = null;
     }
 
@@ -29,5 +40,10 @@ public class MoneyData
     public bool IsUseMoney(int money)
     {
         return CurrentMoney - money >= 0;
+    }
+
+    public void AddTotalMoney()
+    {
+        TotalMoney += CurrentMoney;
     }
 }

@@ -23,6 +23,11 @@ public class MentalData
         MindHP = null;
     }
 
+    public void Next()
+    {
+        MindHP = null;
+    }
+
     /// <summary>
     /// メンタルを変更する
     /// </summary>
