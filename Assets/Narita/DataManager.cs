@@ -44,7 +44,7 @@ public class DataManager : MonoBehaviour
 
         TopicData = new CurrentTopicData();
 
-        ViewerLikedPointData = new ViewerLikedPointData(_maxLikedPoint, _minLikedPoint);
+        ViewerLikedPointData = new ViewerLikedPointData(_maxLikedPoint, _minLikedPoint, _maxDayLikedPoint);
     }
     /// <summary>
     /// すべてを一括で初期化
@@ -101,14 +101,19 @@ public class ViewerLikedPointData
     public int MaxLikedPoint { get; private set; }
     public int MinLikedPoint { get; private set; }
 
+    private int _maxDayPoint;
+    private int _currentDayPoint;
+
     public event Action<string, string> LikeabilityUpdate;
     public event Action OnAddPoint;
 
-    public ViewerLikedPointData(int maxLikedPoint, int minLikedPoint)
+    public ViewerLikedPointData(int maxLikedPoint, int minLikedPoint, int maxDayPoint)
     {
         MaxLikedPoint = maxLikedPoint;
         MinLikedPoint = minLikedPoint;
         BeforeLikedPoint = CurrentLikedPoint;
+        _maxDayPoint = maxDayPoint;
+        _currentDayPoint = 0;
     }
 
     public void ChangeViewerLikedPoint(int viewerLikedPoint)
@@ -117,10 +122,12 @@ public class ViewerLikedPointData
         {
             OnAddPoint?.Invoke();
         }
+        if (_maxDayPoint <= _currentDayPoint) { return; }
 
-        CurrentLikedPoint = Mathf.Clamp(CurrentLikedPoint + viewerLikedPoint, MinLikedPoint, MaxLikedPoint);
+        _currentDayPoint = Mathf.Min(_currentDayPoint + viewerLikedPoint, _maxDayPoint);
+
+        CurrentLikedPoint = Mathf.Clamp(BeforeLikedPoint + _currentDayPoint, MinLikedPoint, MaxLikedPoint);
         LikeabilityUpdate?.Invoke(viewerLikedPoint.ToString(), CurrentLikedPoint.ToString());
-        Debug.Log($"増減{viewerLikedPoint}----値{CurrentLikedPoint}");
     }
 
     public void Next()
@@ -128,6 +135,7 @@ public class ViewerLikedPointData
         BeforeLikedPoint = CurrentLikedPoint;
         LikeabilityUpdate = null;
         OnAddPoint = null;
+        _currentDayPoint = 0;
     }
 
     public void Initialize()
@@ -136,5 +144,6 @@ public class ViewerLikedPointData
         CurrentLikedPoint = 0;
         LikeabilityUpdate = null;
         OnAddPoint = null;
+        _currentDayPoint = 0;
     }
 }
