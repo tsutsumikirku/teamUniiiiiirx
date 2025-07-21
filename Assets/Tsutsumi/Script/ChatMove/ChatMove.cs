@@ -69,7 +69,7 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                     if (!_player.TryGetComponent<Reply>(out var reply)) return;
                     reply.SaveState(_data);
                     if (!_player.TryGetComponent<CharacterTextManager>(out var characterText)) return;
-                    characterText.TextUpdate(_data.Response);
+                    characterText.TextUpdate(_data.Response, _data.MotionType);
                     End();
                 }
                 if (_xMaxDistance > _rectTransform.anchoredPosition.x + _rectTransform.rect.width / 2)
@@ -130,7 +130,7 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 if (!result.gameObject.TryGetComponent<Reply>(out var reply)) return;
                 reply.SaveState(_data);
                 if (!result.gameObject.TryGetComponent<CharacterTextManager>(out var characterText)) return;
-                characterText.TextUpdate(_data.Response);
+                characterText.TextUpdate(_data.Response, _data.MotionType);
                 End();
                 SoundManager.Instance.PlaySE(_onCharacterCatchTag);
                 return;
