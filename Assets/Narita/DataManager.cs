@@ -21,6 +21,7 @@ public class DataManager : MonoBehaviour
     [SerializeField] private int _initialMental = 100;
     [SerializeField] private int _maxMental = 100;
     [SerializeField] private int _maxLikedPoint = 100;
+    [SerializeField] private int _minLikedPoint = -100;
 
     private void Awake()
     {
@@ -41,7 +42,7 @@ public class DataManager : MonoBehaviour
 
         TopicData = new CurrentTopicData();
 
-        ViewerLikedPointData = new ViewerLikedPointData(_maxLikedPoint);
+        ViewerLikedPointData = new ViewerLikedPointData(_maxLikedPoint, _minLikedPoint);
     }
     /// <summary>
     /// すべてを一括で初期化
@@ -83,13 +84,15 @@ public class ViewerLikedPointData
     public int BeforeLikedPoint { get; private set; }
     public int CurrentLikedPoint { get; private set; }
     public int MaxLikedPoint { get; private set; }
+    public int MinLikedPoint { get; private set; }
 
     public event Action<string, string> LikeabilityUpdate;
     public event Action OnAddPoint;
 
-    public ViewerLikedPointData(int viewerLikedPoint)
+    public ViewerLikedPointData(int maxLikedPoint, int minLikedPoint)
     {
-        MaxLikedPoint = viewerLikedPoint;
+        MaxLikedPoint = maxLikedPoint;
+        MinLikedPoint = minLikedPoint;
         BeforeLikedPoint = CurrentLikedPoint;
     }
 
@@ -100,7 +103,7 @@ public class ViewerLikedPointData
             OnAddPoint?.Invoke();
         }
 
-        CurrentLikedPoint = Mathf.Min(CurrentLikedPoint + viewerLikedPoint, MaxLikedPoint);
+        CurrentLikedPoint = Mathf.Clamp(CurrentLikedPoint + viewerLikedPoint, MinLikedPoint, MaxLikedPoint);
         LikeabilityUpdate?.Invoke(viewerLikedPoint.ToString(), CurrentLikedPoint.ToString());
         Debug.Log($"増減{viewerLikedPoint}----値{CurrentLikedPoint}");
     }
