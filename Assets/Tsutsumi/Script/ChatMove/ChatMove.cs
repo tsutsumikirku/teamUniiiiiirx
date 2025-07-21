@@ -26,7 +26,12 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     private Vector2 _initialScale;
     private Vector2 _dragPosition;
     private Vector2 _characterPosition;
-    public CommentAndResponseData _data;
+    private CommentAndResponseData _data;
+    public CommentAndResponseData Data 
+    { 
+        get => _data; 
+        set => UniTaskMove(value).Forget(); 
+    }
 
     private void Awake()
     {
@@ -37,25 +42,32 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         FindObjectOfType<FrameManage>().LayerUpdate();
         _isMoving = true;
         _characterPosition = GameObject.FindWithTag("Player").GetComponent<RectTransform>().anchoredPosition;
-        UniTaskMove().Forget();
     }
-    private async UniTask UniTaskMove()
+    public async UniTask UniTaskMove(CommentAndResponseData data)
     {
+        _data = data;
         CancellationToken cancellationToken = this.GetCancellationTokenOnDestroy();
         while (_isMoving)
         {
-            if (_isEnd) return;
-            while (_isDragging)
+            if (_data.Money != 0 && _data.MentalDamage < 0)
             {
-                _rectTransform.anchoredPosition = (Vector2)Input.mousePosition - _dragPosition;
-                await UniTask.Yield(cancellationToken);
+
             }
-            _rectTransform.anchoredPosition += new Vector2(_speed * Time.deltaTime, 0);
-            if (_xMaxDistance > _rectTransform.anchoredPosition.x + _rectTransform.rect.width / 2)
+            else
             {
-                _isMoving = false;
+                if (_isEnd) return;
+                while (_isDragging)
+                {
+                    _rectTransform.anchoredPosition = (Vector2)Input.mousePosition - _dragPosition;
+                    await UniTask.Yield(cancellationToken);
+                }
+                _rectTransform.anchoredPosition += new Vector2(_speed * Time.deltaTime, 0);
+                if (_xMaxDistance > _rectTransform.anchoredPosition.x + _rectTransform.rect.width / 2)
+                {
+                    _isMoving = false;
+                }
+                await UniTask.Delay(1, cancellationToken: cancellationToken);
             }
-            await UniTask.Delay(1, cancellationToken: cancellationToken);
         }
         if (!TryGetComponent<Comment>(out var comment))
         {
