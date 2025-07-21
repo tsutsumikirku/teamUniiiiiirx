@@ -944,7 +944,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 830359066}
-  - component: {fileID: 830359067}
   m_Layer: 5
   m_Name: Day
   m_TagString: Untagged
@@ -973,20 +972,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 84}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &830359067
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 830359065}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ba1c863526f6154ca8638cc8522b999, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dayText: {fileID: 62188581}
-  _moneyText: {fileID: 1399595680}
 --- !u!1 &859275947
 GameObject:
   m_ObjectHideFlags: 0
@@ -1553,8 +1538,6 @@ MonoBehaviour:
   _maxMental: 100
   _maxLikedPoint: 100
   _minLikedPoint: -100
-  _maxDayLikedPoint: 30
-  _amountPaid: 100000
 --- !u!4 &1108207754
 Transform:
   m_ObjectHideFlags: 0
@@ -2342,7 +2325,6 @@ MonoBehaviour:
   _textUpdateDelay: 50
   _animationDuration: 0.25
   _textObject: {fileID: 352959154}
-  _animator: {fileID: 0}
   _charaTalkText: {fileID: 787667904}
 --- !u!1 &1855232483
 GameObject:

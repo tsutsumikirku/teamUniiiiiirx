@@ -11,7 +11,6 @@ public class CharacterTextManager : MonoBehaviour
     [SerializeField] int _textUpdateDelay = 50;
     [SerializeField] float _animationDuration = 0.25f;
     [SerializeField] GameObject _textObject;
-    [SerializeField] Animator _animator;
     public static CharacterTextManager CharacterTextManagerInstance;
     [SerializeField]TextMeshProUGUI _charaTalkText;
     Vector2 _beforeScale;
@@ -24,7 +23,7 @@ public class CharacterTextManager : MonoBehaviour
         CharacterTextManagerInstance = this;
         _textObject.SetActive(false);
     }
-    public void TextUpdate(string text, string motionData)
+    public void TextUpdate(string text)
     {
         _textObject.SetActive(true);
         _textObject.transform.localScale = Vector2.zero;
@@ -34,14 +33,6 @@ public class CharacterTextManager : MonoBehaviour
         _cancellationTokenSource = new CancellationTokenSource();
         _charaTalkText.text = "";
         TextUpdateAsync(text).Forget();
-        // 怒り
-        // 泣き
-        // 流し目
-        // 焦り
-        // 笑顔
-        // 絶望
-        // 通常
-        // 驚き
     }
     async UniTask TextUpdateAsync(string text)
     {

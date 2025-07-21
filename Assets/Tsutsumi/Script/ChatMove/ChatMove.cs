@@ -51,34 +51,7 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         {
             if (_data.Money != 0 && _data.MentalDamage < 0)
             {
-<<<<<<< HEAD
 
-=======
-                if (ServiceLocater.Get<TimeManager>().StreamTime <= 0)
-                {
-                    Destroy(gameObject);
-                } 
-                if (_isEnd) return;
-                while (_isDragging)
-                {
-                    _rectTransform.anchoredPosition = (Vector2)Input.mousePosition - _dragPosition;
-                    await UniTask.Yield(cancellationToken);
-                }
-                _rectTransform.anchoredPosition += (_rectTransform.anchoredPosition - _characterPosition).normalized *( _speed / 2) * Time.deltaTime;
-                if (Vector2.Distance(_rectTransform.anchoredPosition, _characterPosition) < _collision)
-                {
-                    if (!_player.TryGetComponent<Reply>(out var reply)) return;
-                    reply.SaveState(_data);
-                    if (!_player.TryGetComponent<CharacterTextManager>(out var characterText)) return;
-                    characterText.TextUpdate(_data.Response, _data.MotionType);
-                    End();
-                }
-                if (_xMaxDistance > _rectTransform.anchoredPosition.x + _rectTransform.rect.width / 2)
-                {
-                    _isMoving = false;
-                }
-                await UniTask.Delay(1, cancellationToken: cancellationToken);
->>>>>>> a387cbb91a0c61340e8cf141c30cc12b36881cec
             }
             else
             {
@@ -128,7 +101,7 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 if (!result.gameObject.TryGetComponent<Reply>(out var reply)) return;
                 reply.SaveState(_data);
                 if (!result.gameObject.TryGetComponent<CharacterTextManager>(out var characterText)) return;
-                characterText.TextUpdate(_data.Response, _data.MotionType);
+                characterText.TextUpdate(_data.Response);
                 End();
                 SoundManager.Instance.PlaySE(_onCharacterCatchTag);
                 return;
