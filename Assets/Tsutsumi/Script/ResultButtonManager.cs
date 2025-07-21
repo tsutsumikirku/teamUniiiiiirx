@@ -22,25 +22,27 @@ public class ResultButtonManager : MonoBehaviour
     public void ResultButton()
     {
         DataManager.Instance.DayData.AdvanceOneDay();
-        if (DataManager.Instance.MentalData.CurrentMental <= 0)
+        var type = BranchOutGameOver.GetGameOverType(DataManager.Instance.MentalData.CurrentMental,DataManager.Instance.MoneyData.CurrentMoney);
+        if (type == BranchOutGameOver.BranchOutGameOverType.MentalBreakGameOver)
         {
             SceneManager.LoadScene(retireEndSceneName);
         }
-        else if (DataManager.Instance.MoneyData.CurrentMoney >= richEndMoneyCondition && DataManager.Instance.DayData.CurrentDay >= 0)
+        if(DataManager.Instance.DayData.CurrentDay != 0)
         {
-            SceneManager.LoadScene(richEndSceneName);
+            SoundManager.Instance.PlayBGM("配信準備中BGM");
+            SceneManager.LoadScene("OutGame");
         }
-        else if (DataManager.Instance.MoneyData.TotalMoney >= DataManager.Instance.MoneyData.AmountPaid && DataManager.Instance.DayData.CurrentDay >= 0)
+        switch(type)
         {
-            SceneManager.LoadScene(normalEndSceneName);
-        }
-        else if (DataManager.Instance.MoneyData.TotalMoney < DataManager.Instance.MoneyData.AmountPaid && DataManager.Instance.DayData.CurrentDay >= 0)
-        {
-            SceneManager.LoadScene(homelessEndSceneName);
-        }
-        else
-        {
-            SceneManager.LoadScene("OutGameScene");
+            case BranchOutGameOver.BranchOutGameOverType.RichGameClear:
+                SceneManager.LoadScene(richEndSceneName);
+                break;
+            case BranchOutGameOver.BranchOutGameOverType.NormalGameClear:
+                SceneManager.LoadScene(normalEndSceneName);
+                break;
+            case BranchOutGameOver.BranchOutGameOverType.ForcedRemovalGameOver:
+                SceneManager.LoadScene(homelessEndSceneName);
+                break;
         }
     }
 }
