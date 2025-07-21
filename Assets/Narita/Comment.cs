@@ -13,12 +13,7 @@ public class Comment : MonoBehaviour
     {
         Data = data.Data;
 
-        if (Data.MentalDamage != 0)
-        {
-            CommentType = CommentType.Anti;
-        }
-
-        else if (Data.Money != 0)
+        if (Data.Money != 0)
         {
             CommentType = CommentType.Super;
             DataManager.Instance.MoneyData.ChangeMoney(Data.Money);
@@ -42,5 +37,4 @@ public enum CommentType
 {
     None,
     Super,
-    Anti,
 }
