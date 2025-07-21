@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class UIButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,IPointerEnterHandler,IPointerExitHandler
 {
-    [SerializeField,Header("クリック時のイベントを設定してください")] UnityEvent onClick;
+    [SerializeField,Header("クリック時のイベントを設定してください")] public UnityEvent onClick;
     [SerializeField,Header("マウスカーソルが押されたときか離されたときか設定してください")] ButtonType _buttonType = ButtonType.Down;
     [SerializeField, Header("マウスカーソルがUIの上に載っているときのカラーを指定してください")] Color _pointerEnterColor;
     [SerializeField, Header("UIが押されたときのカラーを指定してください")] Color _pointerDownColor;
