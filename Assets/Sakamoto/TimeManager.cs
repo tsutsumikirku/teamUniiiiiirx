@@ -28,6 +28,8 @@ public class TimeManager : MonoBehaviour
 
     private void Start()
     {
+        ServiceLocater.Set(this);
+
         _cts = new CancellationTokenSource();
 
         float total = DataManager.Instance.ViewerLikedPointData.TotalPoint;
