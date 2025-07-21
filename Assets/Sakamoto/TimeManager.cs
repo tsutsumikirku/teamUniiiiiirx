@@ -11,6 +11,10 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private float _streamTimeLimit = 60f;
     [SerializeField] private float _maxTime = 5, _minTime = 1;
 
+    [SerializeField]
+    [Header("最大到達好感度の数をこの数で割る\n割った数がコメントしてくれる人数になる")]
+    private float _divisor = 10f;
+
     [SerializeField] private int _viewerCount = 5;
 
     public System.Action<string> CommentAction;
@@ -26,6 +30,10 @@ public class TimeManager : MonoBehaviour
     private void Start()
     {
         _cts = new CancellationTokenSource();
+
+        float total = DataManager.Instance.ViewerLikedPointData.TotalPoint;
+        int viewerCount = _viewerCount + (int)(total / _divisor);
+
         for (int i = 0; i < _viewerCount; i++)
         {
             AsyncGenerate(_cts.Token).Forget();
@@ -57,7 +65,7 @@ public class TimeManager : MonoBehaviour
 
         _cts.Cancel();
         OnEndTimer?.Invoke();
-        CharacterTextManager.CharacterTextManagerInstance.TextUpdate("おわった～～。\n一服するかぁ");
+
         SceneManager.LoadSceneAsync("ResultScene", LoadSceneMode.Additive);
     }
 
