@@ -6,13 +6,13 @@ using UnityEngine;
 
 public struct SerifData
 {
-    public int Tension; // ¸_—Í
-    public (int Money, string Serif)[] Serifs; // ‹àŠzAƒZƒŠƒt‚Ìƒ^ƒvƒ‹
-    public string SpecialSerif; // “ÁêƒZƒŠƒt
+    public int Tension; // ï¿½ï¿½ï¿½_ï¿½ï¿½
+    public (int Money, string Serif)[] Serifs; // ï¿½ï¿½ï¿½zï¿½Aï¿½Zï¿½ï¿½ï¿½tï¿½Ìƒ^ï¿½vï¿½ï¿½
+    public string SpecialSerif; // ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½t
 }
 public class PrepairFaseDataManager : MonoBehaviour
 {
-    [SerializeField]private string faseDataCsvPath = "FaseData.csv"; // ƒfƒtƒHƒ‹ƒg‚ÌCSVƒtƒ@ƒCƒ‹–¼
+    [SerializeField]private string faseDataCsvPath = "FaseData.csv"; // ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½ï¿½CSVï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½
     public string PrepairFaseDataPath
     {
         get => faseDataCsvPath;
@@ -23,13 +23,12 @@ public class PrepairFaseDataManager : MonoBehaviour
         }
     }
     [Header("Debug")]
-    [SerializeField] int tension = 0; // ƒfƒoƒbƒO—p‚Ì¸_—Í
-    [SerializeField] int money = 0; // ƒfƒoƒbƒO—p‚Ì‹àŠz
+    [SerializeField] int tension = 0; // ï¿½fï¿½oï¿½bï¿½Oï¿½pï¿½Ìï¿½ï¿½_ï¿½ï¿½
+    [SerializeField] int money = 0; // ï¿½fï¿½oï¿½bï¿½Oï¿½pï¿½Ì‹ï¿½ï¿½z
 
     SerifData[] serifLevels;
     private void Start()
     {
-        LoadFaseData();
     }
     public void LoadFaseData()
     {
@@ -37,18 +36,18 @@ public class PrepairFaseDataManager : MonoBehaviour
         if (File.Exists(faseDataCsvPath))
         {
             string[] lines = File.ReadAllLines(faseDataCsvPath);
-            serifLevels = new SerifData[lines.Length - 1]; // ƒwƒbƒ_[s‚ğœ‚­
+            serifLevels = new SerifData[lines.Length - 1]; // ï¿½wï¿½bï¿½_ï¿½[ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             for (int j = 1; j < lines.Length; j++)
             {
                 string line = lines[j];
                 string[] values = line.Split(',', System.StringSplitOptions.RemoveEmptyEntries);
-                // values[0] : ¸_—Í
-                // values[2n - 1] : ‹àŠz
-                // values[2n] : ƒZƒŠƒt
-                // values[max] : “ÁêƒZƒŠƒt
+                // values[0] : ï¿½ï¿½ï¿½_ï¿½ï¿½
+                // values[2n - 1] : ï¿½ï¿½ï¿½z
+                // values[2n] : ï¿½Zï¿½ï¿½ï¿½t
+                // values[max] : ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½t
                 serifLevels[j - 1] = new SerifData();
                 serifLevels[j - 1].Tension = int.Parse(values[0]);
-                serifLevels[j - 1].Serifs = new (int Money, string Serif)[(values.Length - 2) / 2]; // ‹àŠz‚ÆƒZƒŠƒt‚ÌƒyƒA‚Ì”
+                serifLevels[j - 1].Serifs = new (int Money, string Serif)[(values.Length - 2) / 2]; // ï¿½ï¿½ï¿½zï¿½ÆƒZï¿½ï¿½ï¿½tï¿½Ìƒyï¿½Aï¿½Ìï¿½
                 for (int k = 1; k < values.Length - 1; k += 2)
                 {
                     int money = int.Parse(values[k]);
@@ -59,16 +58,16 @@ public class PrepairFaseDataManager : MonoBehaviour
             }
             foreach (var data in serifLevels)
             {
-                Debug.Log($"¸_—Í‹«ŠE’l : {data.Tension}, ‚¨‹à‚Ì‹«ŠE’l‚ÆƒZƒŠƒt : {data.Serifs},ˆê’è‹àŠzˆÈã‚ÌƒZƒŠƒt : {data.SpecialSerif}");
+                Debug.Log($"ï¿½ï¿½ï¿½_ï¿½Í‹ï¿½ï¿½Eï¿½l : {data.Tension}, ï¿½ï¿½ï¿½ï¿½ï¿½Ì‹ï¿½ï¿½Eï¿½lï¿½ÆƒZï¿½ï¿½ï¿½t : {data.Serifs},ï¿½ï¿½ï¿½ï¿½ï¿½zï¿½Èï¿½ÌƒZï¿½ï¿½ï¿½t : {data.SpecialSerif}");
             }
 
         }
         else
         {
-            Debug.LogError($"CSVƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ: {faseDataCsvPath}");
+            Debug.LogError($"CSVï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½: {faseDataCsvPath}");
         }
     }
-    [ContextMenu("ƒZƒŠƒtæ“¾ƒfƒoƒbƒO")]
+    [ContextMenu("ï¿½Zï¿½ï¿½ï¿½tï¿½æ“¾ï¿½fï¿½oï¿½bï¿½O")]
     private void GetSerif()
     {
         Debug.Log(GetSerif(tension, money));
@@ -79,7 +78,7 @@ public class PrepairFaseDataManager : MonoBehaviour
         {
             if (tension >= serifLevels[i].Tension)
             {
-                // ¸_—Í‚Ì‹«ŠE’l‚ğ’´‚¦‚Ä‚¢‚½ê‡AƒZƒŠƒt‚ğ•Ô‚·
+                // ï¿½ï¿½ï¿½_ï¿½Í‚Ì‹ï¿½ï¿½Eï¿½lï¿½ğ’´‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½Zï¿½ï¿½ï¿½tï¿½ï¿½Ô‚ï¿½
                 for (int j = 0; j < serifLevels[i].Serifs.Length; j++)
                 {
                     if (money <= serifLevels[i].Serifs[j].Money)
@@ -87,11 +86,11 @@ public class PrepairFaseDataManager : MonoBehaviour
                         return serifLevels[i].Serifs[j].Serif;
                     }
                 }
-                // ˆê’è‹àŠzˆÈã‚ÌƒZƒŠƒt‚ª‚ ‚éê‡‚Í‚»‚ê‚ğ•Ô‚·
+                // ï¿½ï¿½ï¿½ï¿½ï¿½zï¿½Èï¿½ÌƒZï¿½ï¿½ï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Í‚ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½
                 return serifLevels[i].SpecialSerif;
             }
         }
-        Debug.LogWarning("ŠY“–‚·‚éƒZƒŠƒt‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B¸_—Í‚â‚¨‹à‚Ì’l‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B");
-        return string.Empty; // ‚±‚±‚ªŒÄ‚Î‚ê‚é‚±‚Æ‚Í‚È‚¢
+        Debug.LogWarning("ï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½tï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½_ï¿½Í‚â‚¨ï¿½ï¿½ï¿½Ì’lï¿½ï¿½ï¿½mï¿½Fï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B");
+        return string.Empty; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚Î‚ï¿½é‚±ï¿½Æ‚Í‚È‚ï¿½
     }
 }

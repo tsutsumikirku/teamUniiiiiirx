@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class FrameManage : MonoBehaviour
 {
@@ -41,7 +42,7 @@ public class FrameManage : MonoBehaviour
         DataManager.Instance.MentalData.MindHP += HPSliderUpdate;
         DataManager.Instance.ViewerLikedPointData.LikeabilityUpdate += LikePointUpdate;
         DataManager.Instance.MoneyData.CoinViewUpdate += MoneyUpdate;
-        FindObjectOfType<TimeManager>().OnTimer += TimeSliderUpdate;
+        if(_timeSlider)FindObjectOfType<TimeManager>().OnTimer += TimeSliderUpdate;
         DayTextUpdate(DataManager.Instance.DayData.CurrentDay.ToString());
         HPSliderUpdate(DataManager.Instance.MentalData.CurrentMental / 100);
         _likePointText.text = "好感度:" + 0;
@@ -68,7 +69,7 @@ public class FrameManage : MonoBehaviour
     private void DayTextUpdate(string value1)
     {
         if (!_dayText) return;
-        _dayText.text = value1 + "日目";
+        _dayText.text = Mathf.Abs(int.Parse(value1) - 6) + "日目";
     }
     private void LikePointUpdate(string value1, string value2)
     {
