@@ -101,6 +101,8 @@ public class ViewerLikedPointData
     public int MaxLikedPoint { get; private set; }
     public int MinLikedPoint { get; private set; }
 
+    public int TotalPoint { get; private set; }
+
     private int _maxDayPoint;
     private int _currentDayPoint;
 
@@ -114,6 +116,7 @@ public class ViewerLikedPointData
         BeforeLikedPoint = CurrentLikedPoint;
         _maxDayPoint = maxDayPoint;
         _currentDayPoint = 0;
+        TotalPoint = 0;
     }
 
     public void ChangeViewerLikedPoint(int viewerLikedPoint)
@@ -127,6 +130,9 @@ public class ViewerLikedPointData
         _currentDayPoint = Mathf.Min(_currentDayPoint + viewerLikedPoint, _maxDayPoint);
 
         CurrentLikedPoint = Mathf.Clamp(BeforeLikedPoint + _currentDayPoint, MinLikedPoint, MaxLikedPoint);
+
+        TotalPoint = Mathf.Max(TotalPoint, CurrentLikedPoint);
+
         LikeabilityUpdate?.Invoke(viewerLikedPoint.ToString(), CurrentLikedPoint.ToString());
     }
 
@@ -136,6 +142,7 @@ public class ViewerLikedPointData
         LikeabilityUpdate = null;
         OnAddPoint = null;
         _currentDayPoint = 0;
+        TotalPoint = 0;
     }
 
     public void Initialize()
@@ -145,5 +152,6 @@ public class ViewerLikedPointData
         LikeabilityUpdate = null;
         OnAddPoint = null;
         _currentDayPoint = 0;
+        TotalPoint = 0;
     }
 }
