@@ -102,6 +102,7 @@ public class ViewerLikedPointData
     public int MinLikedPoint { get; private set; }
 
     public int TotalPoint { get; private set; }
+    public int TotalMinusPoint { get; private set; }
 
     private int _maxDayPoint;
     private int _currentDayPoint;
@@ -117,28 +118,39 @@ public class ViewerLikedPointData
         _maxDayPoint = maxDayPoint;
         _currentDayPoint = 0;
         TotalPoint = 0;
+        TotalMinusPoint = 0;
     }
 
     public void ChangeViewerLikedPoint(int viewerLikedPoint)
     {
-        if (CurrentLikedPoint > 0)
+        // 減点の場合は記録だけして即反映
+        if (viewerLikedPoint < 0)
         {
-            OnAddPoint?.Invoke();
+            TotalMinusPoint += viewerLikedPoint;
+            CurrentLikedPoint = Mathf.Clamp(CurrentLikedPoint + viewerLikedPoint, MinLikedPoint, MaxLikedPoint);
+            LikeabilityUpdate?.Invoke(viewerLikedPoint.ToString(), CurrentLikedPoint.ToString());
+            return;
         }
 
-        int beforeDayPoint = _currentDayPoint;
-        _currentDayPoint = Mathf.Min(_currentDayPoint + viewerLikedPoint, _maxDayPoint);
+        // 加点の場合は、獲得好感度が最大値を超えないように制限
+        int gained = CurrentLikedPoint - BeforeLikedPoint;
 
-        // 実際に加算できた量を計算
-        int actualAdded = _currentDayPoint - beforeDayPoint;
+        int allowedAdd = Mathf.Min(viewerLikedPoint, _maxDayPoint - gained);
 
-        CurrentLikedPoint = Mathf.Clamp(BeforeLikedPoint + _currentDayPoint, MinLikedPoint, MaxLikedPoint);
+        if (allowedAdd <= 0)
+        {
+            // もう加点できない
+            LikeabilityUpdate?.Invoke("0", CurrentLikedPoint.ToString());
+            return;
+        }
 
+        CurrentLikedPoint = Mathf.Clamp(CurrentLikedPoint + allowedAdd, MinLikedPoint, MaxLikedPoint);
         TotalPoint = Mathf.Max(TotalPoint, CurrentLikedPoint);
 
-        LikeabilityUpdate?.Invoke(actualAdded.ToString(), CurrentLikedPoint.ToString());
-    }
+        OnAddPoint?.Invoke();
 
+        LikeabilityUpdate?.Invoke(allowedAdd.ToString(), CurrentLikedPoint.ToString());
+    }
     public void Next()
     {
         BeforeLikedPoint = CurrentLikedPoint;
@@ -146,6 +158,7 @@ public class ViewerLikedPointData
         OnAddPoint = null;
         _currentDayPoint = 0;
         TotalPoint = 0;
+        TotalMinusPoint = 0;
     }
 
     public void Initialize()
@@ -156,5 +169,6 @@ public class ViewerLikedPointData
         OnAddPoint = null;
         _currentDayPoint = 0;
         TotalPoint = 0;
+        TotalMinusPoint = 0;
     }
 }
