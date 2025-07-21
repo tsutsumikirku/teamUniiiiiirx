@@ -16,6 +16,7 @@ public class CommentGenerator : MonoBehaviour
 
     [SerializeField, Header("タイムマネージャー")] private TimeManager _timeManger;
 
+    [SerializeField, Header("アンチコメントの生成確率  1 / value")] private float _value = 5;
     private void Awake()
     {
         _commentDataManager = new CommentDataManager();
@@ -44,20 +45,39 @@ public class CommentGenerator : MonoBehaviour
     {
         Comment com = Instantiate(_commentData, _uiParent);
 
+        float value = 1 / _value;
+        float rand = Random.Range(0f, 1f);
+
         CommentAndResponseData data;
 
-        if (!string.IsNullOrEmpty(topic) && _currentCount != 0)
+        if (value < rand)
         {
-            data = new CommentAndResponseData();
-            _commentDataManager.GetCommentData(topic, ref data);
-            _currentCount--;
+            if (!string.IsNullOrEmpty(topic) && _currentCount != 0)
+            {
+                data = new CommentAndResponseData();
+                _commentDataManager.GetCommentData(topic, ref data);
+                _currentCount--;
+            }
+            //話題がなかったら、または、話題生成の上限に達していたら
+            else
+            {
+                data = _commentDataManager.GetCommentData();
+            }
         }
-        //話題がなかったら、または、話題生成の上限に達していたら
         else
         {
-            data = _commentDataManager.GetCommentData();
+            if (!string.IsNullOrEmpty(topic) && _currentCount != 0)
+            {
+                data = new CommentAndResponseData();
+                _commentDataManager.GetHateCommentData(topic, ref data);
+                _currentCount--;
+            }
+            //話題がなかったら、または、話題生成の上限に達していたら
+            else
+            {
+                data = _commentDataManager.GetHateCommentData();
+            }
         }
-
         com.SetData(new CommentData(data));
     }
     public void SetSuperChat()
@@ -70,11 +90,11 @@ public class CommentGenerator : MonoBehaviour
         float superChatProbability = (currentLikedPoint / 2f) / maxLikedPoint;
         float rand = Random.Range(0f, 1f);
 
-        Comment com = Instantiate(_commentData, _uiParent);
-        CommentAndResponseData data;
 
         if (rand < superChatProbability)
         {
+            Comment com = Instantiate(_commentData, _uiParent);
+            CommentAndResponseData data;
             // SuperChatデータを取得
             if (!string.IsNullOrEmpty(topic) && _currentCount != 0)
             {
@@ -87,22 +107,13 @@ public class CommentGenerator : MonoBehaviour
             {
                 data = _commentDataManager.GetSuperChatData();
             }
+            com.SetData(new CommentData(data));
         }
         else
         {
             // 通常のコメントデータを取得
-            if (!string.IsNullOrEmpty(topic) && _currentCount != 0)
-            {
-                data = new CommentAndResponseData();
-                _commentDataManager.GetCommentData(topic, ref data);
-                _currentCount--;
-            }
-            else
-            {
-                data = _commentDataManager.GetCommentData();
-            }
+            SetComment(topic);
+            return;
         }
-
-        com.SetData(new CommentData(data));
     }
 }
