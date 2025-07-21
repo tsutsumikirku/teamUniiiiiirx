@@ -28,8 +28,6 @@ public class TimeManager : MonoBehaviour
 
     private void Start()
     {
-        ServiceLocater.Set(this);
-
         _cts = new CancellationTokenSource();
 
         float total = DataManager.Instance.ViewerLikedPointData.TotalPoint;
@@ -45,6 +43,7 @@ public class TimeManager : MonoBehaviour
 
     public async UniTask AsyncTimer(float streamTime, CancellationToken token)
     {
+        Debug.Log("配信開始");
         StreamTime = streamTime;
         while (StreamTime > 0)
         {
@@ -61,6 +60,7 @@ public class TimeManager : MonoBehaviour
             await UniTask.Yield(cancellationToken: token);
             OnTimer?.Invoke(StreamTime / streamTime, StreamTime);
         }
+        Debug.Log("ストリーム終了");
 
         _cts.Cancel();
         OnEndTimer?.Invoke();
@@ -75,6 +75,7 @@ public class TimeManager : MonoBehaviour
             float randTime = UnityEngine.Random.Range(_minTime, _maxTime);
             await UniTask.Delay((int)(randTime * 1000), cancellationToken: token);
 
+            Debug.Log("コメントジェネレーター発火");
             CommentAction?.Invoke(DataManager.Instance.TopicData.Topic);
         }
     }

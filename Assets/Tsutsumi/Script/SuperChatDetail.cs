@@ -6,12 +6,8 @@ using TMPro;
 public class SuperChatDetail : MonoBehaviour
 {
     [SerializeField]TextMeshProUGUI _text;
-    public void SetText(string text, CommentAndResponseData data)
+    public void SetText(string text)
     {
         _text.text = text;
-        if (data.MentalDamage > 0)
-        {
-            _text.color = Color.red; // Set text color to red for anti comments
-        }
     }   
 }

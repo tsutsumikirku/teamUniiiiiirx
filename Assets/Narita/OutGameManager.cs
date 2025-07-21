@@ -22,7 +22,6 @@ public class OutGameManager : MonoBehaviour
     public void Rest()
     {
         DataManager.Instance.MentalData.ChangeMental(_restPoint);
-        DataManager.Instance.DayData.AdvanceOneDay();
     }
 
     public void GoStream()
