@@ -21,11 +21,14 @@ public class CommentGenerator : MonoBehaviour
     {
         _commentDataManager = new CommentDataManager();
 
+        DataManager.Instance.TopicData.OnStateChange += Initialize;
+        DataManager.Instance.ViewerLikedPointData.OnAddPoint += SetSuperChat;
+    }
+    private void Start()
+    {
         _timeManger = ServiceLocater.Get<TimeManager>();
 
         _timeManger.CommentAction += SetComment;
-        DataManager.Instance.TopicData.OnStateChange += Initialize;
-        DataManager.Instance.ViewerLikedPointData.OnAddPoint += SetSuperChat;
     }
 
     private void OnDisable()
