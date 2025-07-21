@@ -5,6 +5,7 @@ using DG.Tweening;
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
+using UnityEngine.Events;
 
 public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -15,6 +16,9 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     [SerializeField] private float _yMinDistance = -1000f;
     [SerializeField] private float _yMaxDistance = 0;
     [SerializeField] private float _collision = 50f;
+    [SerializeField, Header("クリックしたときのサウンドの名前")] private string _onClickSoundTag;
+    [SerializeField, Header("リリースしたときのサウンドの名前")] private string _onReleaseSoundTag;
+    [SerializeField, Header("ネルさんに食べさせた時のサウンドの名前")] private string _onCharacterCatchTag; 
     private bool _isEnd = false;
     private bool _isMoving;
     private bool _isDragging;
@@ -40,39 +44,16 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         CancellationToken cancellationToken = this.GetCancellationTokenOnDestroy();
         while (_isMoving)
         {
-            if (_data.MentalDamage < 0)
+            if (_isEnd) return;
+            while (_isDragging)
             {
-                if (_isEnd) return;
-                while (_isDragging)
-                {
-                    _rectTransform.anchoredPosition = (Vector2)Input.mousePosition - _dragPosition;
-                    await UniTask.Yield(cancellationToken);
-                }
-                _rectTransform.anchoredPosition += new Vector2(_speed * Time.deltaTime, 0) + ((_characterPosition - _rectTransform.anchoredPosition).normalized * 100);
-                if (Mathf.Abs((_characterPosition - _rectTransform.anchoredPosition).x * (_characterPosition - _rectTransform.anchoredPosition).x + 
-                (_characterPosition - _rectTransform.anchoredPosition).y * (_characterPosition - _rectTransform.anchoredPosition).y) < _collision)
-                {
-                    var chara = GameObject.FindWithTag("Player");
-                    if (!chara.TryGetComponent<Reply>(out var reply)) return;
-                    reply.SaveState(_data);
-                    if (!chara.TryGetComponent<CharacterTextManager>(out var characterText)) return;
-                    characterText.TextUpdate(_data.Response);
-                    End();
-                }
+                _rectTransform.anchoredPosition = (Vector2)Input.mousePosition - _dragPosition;
+                await UniTask.Yield(cancellationToken);
             }
-            else
+            _rectTransform.anchoredPosition += new Vector2(_speed * Time.deltaTime, 0);
+            if (_xMaxDistance > _rectTransform.anchoredPosition.x + _rectTransform.rect.width / 2)
             {
-                if (_isEnd) return;
-                while (_isDragging)
-                {
-                    _rectTransform.anchoredPosition = (Vector2)Input.mousePosition - _dragPosition;
-                    await UniTask.Yield(cancellationToken);
-                }
-                _rectTransform.anchoredPosition += new Vector2(_speed * Time.deltaTime, 0);
-                if (_xMaxDistance > _rectTransform.anchoredPosition.x + _rectTransform.rect.width / 2)
-                {
-                    _isMoving = false;
-                }
+                _isMoving = false;
             }
             await UniTask.Delay(1, cancellationToken: cancellationToken);
         }
@@ -94,6 +75,7 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         _isDragging = true;
         _dragPosition = (Vector2)Input.mousePosition - _rectTransform.anchoredPosition;
+        SoundManager.Instance.PlaySE(_onClickSoundTag);
     }
     public void OnPointerUp(PointerEventData eventData)
     {
@@ -109,7 +91,10 @@ public class ChatMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                 if (!result.gameObject.TryGetComponent<CharacterTextManager>(out var characterText)) return;
                 characterText.TextUpdate(_data.Response);
                 End();
+                SoundManager.Instance.PlaySE(_onCharacterCatchTag);
+                return;
             }
+            SoundManager.Instance.PlaySE(_onReleaseSoundTag);
         }
     } 
 

@@ -36,6 +36,7 @@ public class FrameManage : MonoBehaviour
     private Tween _timeTween;
     async UniTask Awake()
     {
+        DataManager.Instance.NextScene();
         await UniTask.WaitUntil(() => DataManager.Instance != null);
         await UniTask.WaitUntil(() => DataManager.Instance.MentalData != null);
         await UniTask.WaitUntil(() => DataManager.Instance.ViewerLikedPointData != null);
