@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
@@ -14,6 +15,7 @@ public class CharacterTextManager : MonoBehaviour
     [SerializeField]TextMeshProUGUI _charaTalkText;
     Vector2 _beforeScale;
     bool _isTextUpdate = false;
+    CancellationTokenSource _cancellationTokenSource;
 
     void Awake()
     {
@@ -27,6 +29,9 @@ public class CharacterTextManager : MonoBehaviour
         _textObject.transform.localScale = Vector2.zero;
         _charaTalkText.text = "";
         _textObject.transform.DOScale(_beforeScale, 0.25f);
+        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource = new CancellationTokenSource();
+        _charaTalkText.text = "";
         TextUpdateAsync(text).Forget();
     }
     async UniTask TextUpdateAsync(string text)
@@ -35,7 +40,7 @@ public class CharacterTextManager : MonoBehaviour
         {
             if (_isTextUpdate) return;
             _charaTalkText.text += text[i];
-            await UniTask.Delay(_textUpdateDelay);
+            await UniTask.Delay(_textUpdateDelay, cancellationToken: _cancellationTokenSource?.Token ?? CancellationToken.None);
         }
     }
     void TextHidden()
