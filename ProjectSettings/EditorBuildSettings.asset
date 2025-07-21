@@ -11,4 +11,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Higashi/Scenes/AkitoIngame.unity
     guid: 3c3512b3de732104a987d26c6f70ba14
+  - enabled: 1
+    path: Assets/Tsutsumi/InGame.unity
+    guid: f2c11af196add7442ba5a90552ebf3ae
+  - enabled: 1
+    path: Assets/Tsutsumi/OutGame.unity
+    guid: 648b136bd1df41645851f94711c95a25
+  - enabled: 1
+    path: Assets/Tsutsumi/ResultScene.unity
+    guid: 8b50eac85a2db8544b08023a8ced9627
+  - enabled: 1
+    path: Assets/Tsutsumi/TestScene.unity
+    guid: fb1e3fef6f769e143af91e8dc5e1e726
   m_configObjects: {}

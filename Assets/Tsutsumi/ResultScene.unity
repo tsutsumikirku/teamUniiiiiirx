@@ -1224,6 +1224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1739246900}
   - component: {fileID: 1739246903}
+  - component: {fileID: 1739246904}
   - component: {fileID: 1739246902}
   - component: {fileID: 1739246901}
   m_Layer: 5
@@ -1267,7 +1268,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1739246904}
+        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OutGame
+          m_BoolArgument: 0
+        m_CallState: 2
   _buttonType: 0
   _pointerEnterColor: {r: 1, g: 1, b: 1, a: 1}
   _pointerDownColor: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 1}
@@ -1314,6 +1327,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1739246899}
   m_CullTransparentMesh: 1
+--- !u!114 &1739246904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739246899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75a03d7f5c3fb49499260ffb7533b39b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1756753967
 GameObject:
   m_ObjectHideFlags: 0
