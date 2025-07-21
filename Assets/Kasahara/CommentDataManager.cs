@@ -152,7 +152,7 @@ public class CommentDataManager
     public CommentAndResponseData GetHateCommentData()
     {
         CommentAndResponseData data = new CommentAndResponseData();
-        GetCommentData("Common", ref data);
+        GetHateCommentData("Common", ref data);
         return data;
     }
     public bool GetHateCommentData(string type, ref CommentAndResponseData data)
