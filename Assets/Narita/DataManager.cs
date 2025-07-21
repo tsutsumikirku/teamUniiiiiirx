@@ -64,7 +64,7 @@ public class DataManager : MonoBehaviour
     /// <summary>
     /// 次の配信に移る際のデータの初期化
     /// </summary>
-    public void NextStream()
+    public void NextScene()
     {
         MentalData.Next();
 
